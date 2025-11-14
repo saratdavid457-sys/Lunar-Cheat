@@ -6,36 +6,6 @@
 -- SERVICES & BASE SETUP  --
 ----------------------------
 
-local HttpService = game:GetService("HttpService")
-
-local function checkWhitelist()
-    local username = game.Players.LocalPlayer.Name
-    local url = "https://raw.githubusercontent.com/saratdavid457-sys/Lunar-Cheat/main/whitelist.json"
-
-    local data = HttpService:GetAsync(url)
-    local json = HttpService:JSONDecode(data)
-
-    for _,u in pairs(json.users) do
-        if string.lower(u.username) == string.lower(username) then
-            if u.expire == "lifetime" then return true end
-
-            local exp = DateTime.fromIsoDate(u.expire)
-            if DateTime.now().UnixTimestamp < exp.UnixTimestamp then
-                return true
-            end
-
-            return false
-        end
-    end
-
-    return false
-end
-
-if not checkWhitelist() then
-    game.Players.LocalPlayer:Kick("Nu esti whitelist!")
-    return
-end
-
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
