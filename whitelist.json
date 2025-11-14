@@ -1,3 +1,7 @@
 {
-    "users": []
+    "users": [],
+    "<Davidos1234567891234>": {
+        "type": "lifetime",
+        "expires": "lifetime"
+    }
 }
