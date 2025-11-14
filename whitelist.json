@@ -3,5 +3,9 @@
     "Davidos1234567891234": {
         "type": "lifetime",
         "expires": "lifetime"
+    },
+    "<Nicolasnebun1>": {
+        "type": "lifetime",
+        "expires": "lifetime"
     }
 }
