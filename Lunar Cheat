@@ -928,6 +928,32 @@ local function buildMainMenu()
         infJumpEnabled = state
     end)
 
+	-- ✓ SPEED MODIFIER (WalkSpeed local)
+local walkSpeed = 16 -- valoarea inițială Roblox
+
+createSlider(mlContainer, "Speed Modifier", 1, 500, walkSpeed, function(v)
+    walkSpeed = v
+    
+    local char = LP.Character
+    if char then
+        local hum = char:FindFirstChildWhichIsA("Humanoid")
+        if hum then
+            hum.WalkSpeed = walkSpeed
+        end
+    end
+end)
+
+-- ✓ păstrează viteza și după respawn
+local mrTitle = Instance.new("TextLabel", miscRight)
+LP.CharacterAdded:Connect(function(char)
+    task.wait(0.2)
+    local hum = char:FindFirstChildWhichIsA("Humanoid")
+    if hum then
+        hum.WalkSpeed = walkSpeed
+    end
+end)
+
+
     local mrTitle = Instance.new("TextLabel", miscRight)
     mrTitle.Size = UDim2.new(1,-20,0,24)
     mrTitle.Position = UDim2.new(0,10,0,8)
