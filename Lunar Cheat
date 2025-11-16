@@ -28,9 +28,7 @@ local UI_PARENT = getUiParent()
 ----------------
 -- KEY SYSTEM --
 ----------------
-local ACCESS_KEY = "week-12389123wdawdAWdaw11-Lunar"
-local ACCESS_KEY = "Day-7081271dawdDAD1238DAW-lunar"
-local ACCESS_KEY = "Lifetime-123123adawdawdAwADAWd1231123-lunar"
+
 local unlocked = false
 
 ----------------
