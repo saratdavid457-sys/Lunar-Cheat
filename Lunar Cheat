@@ -1,4 +1,3 @@
-fami un script pt highlight doar ca skeletoni si adaugal la acest script
 
 -- DXD LEGIT MENU v2 (Solara version)
 -- Key System + Aimbot Hitbox + ESP colors + Radar + Fly + Infinite Jump + Invisibility
@@ -1161,5 +1160,6 @@ end)
 -- START
 ----------------
 openKeyUI()
+
 
 
