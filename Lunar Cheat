@@ -1,3 +1,49 @@
+-- ============ KEY SYSTEM START ==============
+
+local HttpService = game:GetService("HttpService")
+
+local keyURL = "https://raw.githubusercontent.com/TU/REPO/BRANCH/keys.json"
+
+-- creează un GUI simplu să ceară key-ul
+local keyGui = Instance.new("ScreenGui", game.CoreGui)
+local frame = Instance.new("Frame", keyGui)
+frame.Size = UDim2.new(0, 300, 0, 150)
+frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+
+local box = Instance.new("TextBox", frame)
+box.Size = UDim2.new(1, -20, 0, 40)
+box.Position = UDim2.new(0, 10, 0, 20)
+box.PlaceholderText = "Enter Key"
+
+local btn = Instance.new("TextButton", frame)
+btn.Size = UDim2.new(1, -20, 0, 40)
+btn.Position = UDim2.new(0, 10, 0, 70)
+btn.Text = "Login"
+
+local keyValidated = false
+
+btn.MouseButton1Click:Connect(function()
+    local inputKey = box.Text
+    
+    local raw = game:HttpGet(keyURL)
+    local data = HttpService:JSONDecode(raw)
+
+    if data[inputKey] then
+        keyValidated = true
+        keyGui:Destroy()
+        print("✓ KEY VALID — SCRIPT PORNIT")
+    else
+        box.Text = "INVALID KEY!"
+        task.wait(1)
+        box.Text = ""
+    end
+end)
+
+repeat task.wait() until keyValidated == true
+
+-- ============ KEY SYSTEM END ==============
+
 local UIS = game:GetService("UserInputService")
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
