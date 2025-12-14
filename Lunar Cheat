@@ -1,3262 +1,677 @@
--- ============ KEY SYSTEM START ==============
-
-local HttpService = game:GetService("HttpService")
-
-local keyURL = "https://raw.githubusercontent.com/TU/REPO/BRANCH/keys.json"
-
--- creează un GUI simplu să ceară key-ul
-local keyGui = Instance.new("ScreenGui", game.CoreGui)
-local frame = Instance.new("Frame", keyGui)
-frame.Size = UDim2.new(0, 300, 0, 150)
-frame.Position = UDim2.new(0.5, -150, 0.5, -75)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-
-local box = Instance.new("TextBox", frame)
-box.Size = UDim2.new(1, -20, 0, 40)
-box.Position = UDim2.new(0, 10, 0, 20)
-box.PlaceholderText = "Enter Key"
-
-local btn = Instance.new("TextButton", frame)
-btn.Size = UDim2.new(1, -20, 0, 40)
-btn.Position = UDim2.new(0, 10, 0, 70)
-btn.Text = "Login"
-
-local keyValidated = false
-
-btn.MouseButton1Click:Connect(function()
-    local inputKey = box.Text
-    
-    local raw = game:HttpGet(keyURL)
-    local data = HttpService:JSONDecode(raw)
-
-    if data[inputKey] then
-        keyValidated = true
-        keyGui:Destroy()
-        print("✓ KEY VALID — SCRIPT PORNIT")
-    else
-        box.Text = "INVALID KEY!"
-        task.wait(1)
-        box.Text = ""
-    end
-end)
-
-repeat task.wait() until keyValidated == true
-
--- ============ KEY SYSTEM END ==============
-
-local UIS = game:GetService("UserInputService")
-local HttpService = game:GetService("HttpService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-if UIS.TouchEnabled and not UIS.MouseEnabled and not UIS.KeyboardEnabled then
-    getgenv().bypass_adonis = true
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/FakeAngles/PasteWare-v2/refs/heads/main/PasteWareV2LegacyMobile.lua'))() return
+repeat task.wait() until game:IsLoaded()
+shared.oldgetcustomasset = shared.oldgetcustomasset or getcustomasset
+local smooth = not game:IsLoaded()
+repeat task.wait() until game:IsLoaded()
+if smooth then
+    task.wait(10)
 end
-
-if not game:IsLoaded() then
-    game.Loaded:Wait()
-end
-
-if not syn or not protectgui then
-    getgenv().protectgui = function() end
-end
-
-if bypass_adonis then
-    task.spawn(function()
-        local g = getinfo or debug.getinfo
-        local d = false
-        local h = {}
-        local x, y
-        setthreadidentity(2)
-        for i, v in getgc(true) do
-            if typeof(v) == "table" then
-                local a = rawget(v, "Detected")
-                local b = rawget(v, "Kill")
-
-                if typeof(a) == "function" and not x then
-                    x = a
-                    local o; o = hookfunction(x, function(c, f, n)
-                        if c ~= "_" then
-                            if d then
-                            end
-                        end
-                        return true
-                    end)
-                    table.insert(h, x)
-                end
-
-                if rawget(v, "Variables") and rawget(v, "Process") and typeof(b) == "function" and not y then
-                    y = b
-                    local o; o = hookfunction(y, function(f)
-                        if d then
-                        end
-                    end)
-                    table.insert(h, y)
-                end
-            end
-        end
-        local o; o = hookfunction(getrenv().debug.info, newcclosure(function(...)
-            local a, f = ...
-            if x and a == x then
-                return coroutine.yield(coroutine.running())
-            end
-            return o(...)
-        end))
-        setthreadidentity(7)
-    end)
-end
-
-if not getgenv().ScriptState then
-    getgenv().ScriptState = {
-        isLockedOn = false,
-        targetPlayer = nil,
-        lockEnabled = false,
-        aimLockKeyMode = "Toggle",
-        aimLockVisibleCheck = false,
-        aimLockAliveCheck = false,
-        aimLockTeamCheck = false,
-        smoothingFactor = 0.1,
-        predictionFactor = 0.0,
-        bodyPartSelected = "Head",
-        ClosestHitPart = nil,
-        previousHighlight = nil,
-        lockedTime = 12,
-        reverseResolveIntensity = 5,
-        Desync = false,
-        antiLockEnabled = false,
-        resolverIntensity = 1.0,
-        resolverMethod = "Recalculate",
-        fovEnabled = false,
-        fovMode = "Mouse",
-        nebulaEnabled = false,
-        fovValue = 70,
-        SelfChamsEnabled = false,
-        RainbowChamsEnabled = false,
-        SelfChamsColor = Color3.fromRGB(255, 255, 255),
-        ChamsEnabled = false,
-        isSpeedActive = false,
-        isFlyActive = false,
-        isNoClipActive = false,
-        flySpeed = 1,
-        Cmultiplier = 1,
-        strafeEnabled = false,
-        strafeSpeed = 50,
-        strafeRadius = 5,
-        strafeMode = "Horizontal",
-        strafeTargetPart = nil,
-        originalCameraMode = nil,
-    }
-end
-
-local SilentAimSettings = {
-    Enabled = false,
-
-    ClassName = "Qxcky Privat",
-    ToggleKey = "None",
-    KeyMode = "Toggle",
-
-    TeamCheck = false,
-    VisibleCheck = false,
-    AliveCheck = false,
-    TargetPart = "HumanoidRootPart",
-    SilentAimMethod = "Raycast",
-
-    FOVRadius = 130,
-    FOVVisible = false,
-    ShowSilentAimTarget = false,
-
-    HitChance = 100,
-    MultiplyUnitBy = 1000,
-    BlockedMethods = {},
-    Include = { Character = true, Camera = true },
-    Origin = { Camera = true },
-    BulletTP = false,
-    CheckForFireFunc = false,
-}
-
-getgenv().SilentAimSettings = SilentAimSettings
-
-local Services = {
-    Players = game:GetService("Players"),
-    RunService = game:GetService("RunService"),
-    GuiService = game:GetService("GuiService"),
-    UserInputService = game:GetService("UserInputService"),
-    HttpService = game:GetService("HttpService"),
-    ReplicatedStorage = game:GetService("ReplicatedStorage"),
-    Lighting = game:GetService("Lighting"),
-    SoundService = game:GetService("SoundService")
-}
-
-local Players = Services.Players
-local RunService = Services.RunService
-local GuiService = Services.GuiService
-local UserInputService = Services.UserInputService
-local HttpService = Services.HttpService
-local ReplicatedStorage = Services.ReplicatedStorage
-local SoundService = Services.SoundService
-local Camera = workspace.CurrentCamera
-
-local LocalPlayer = Players.LocalPlayer
-local Client = LocalPlayer
-
-local GetChildren = game.GetChildren
-local GetPlayers = Players.GetPlayers
-local WorldToScreen = Camera.WorldToScreenPoint
-local WorldToViewportPoint = Camera.WorldToViewportPoint
-local GetPartsObscuringTarget = Camera.GetPartsObscuringTarget
-local FindFirstChild = game.FindFirstChild
-local RenderStepped = RunService.RenderStepped
-local GuiInset = GuiService.GetGuiInset
-local GetMouseLocation = UserInputService.GetMouseLocation
-
-local ValidTargetParts = {"Head", "HumanoidRootPart"}
-local PredictionAmount = 0.165
-
-local fov_circle = Drawing.new("Circle")
-fov_circle.Thickness = 1
-fov_circle.NumSides = 100
-fov_circle.Radius = 180
-fov_circle.Filled = false
-fov_circle.Visible = false
-fov_circle.ZIndex = 999
-fov_circle.Transparency = 1
-fov_circle.Color = Color3.fromRGB(54, 57, 241)
-
-local ExpectedArguments = {
-    ViewportPointToRay = {
-        ArgCountRequired = 2,
-        Args = { "number", "number" }
-    },
-    ScreenPointToRay = {
-        ArgCountRequired = 2,
-        Args = { "number", "number" }
-    },
-    Raycast = {
-        ArgCountRequired = 3,
-        Args = { "Instance", "Vector3", "Vector3", "RaycastParams" }
-    },
-    FindPartOnRay = {
-        ArgCountRequired = 2,
-        Args = { "Ray", "Instance?", "boolean?", "boolean?" }
-    },
-    FindPartOnRayWithIgnoreList = {
-        ArgCountRequired = 2,
-        Args = { "Ray", "table", "boolean?", "boolean?" }
-    },
-    FindPartOnRayWithWhitelist = {
-        ArgCountRequired = 2,
-        Args = { "Ray", "table", "boolean?" }
-    }
-}
-
-function CalculateChance(Percentage)
-
-    Percentage = math.floor(Percentage)
-
-
-    local chance = math.floor(Random.new().NextNumber(Random.new(), 0, 1) * 100) / 100
-
-
-    return chance <= Percentage / 100
-end
-
-
-local function getPositionOnScreen(Vector)
-    local Vec3, OnScreen = WorldToScreen(Camera, Vector)
-    return Vector2.new(Vec3.X, Vec3.Y), OnScreen
-end
-
-local function ValidateArguments(Args, RayMethod)
-    local Matches = 0
-    if #Args < RayMethod.ArgCountRequired then
-        return false
-    end
-
-    for Pos, Argument in next, Args do
-        local Expected = RayMethod.Args[Pos]
-        if not Expected then
-            break
-        end
-
-        local IsOptional = Expected:sub(-1) == "?"
-        local BaseType = IsOptional and Expected:sub(1, -2) or Expected
-
-        if typeof(Argument) == BaseType then
-            Matches = Matches + 1
-        elseif IsOptional and Argument == nil then
-            Matches = Matches + 1
-        end
-    end
-
-    return Matches >= RayMethod.ArgCountRequired
-end
-
-local function getDirection(Origin, Position)
-    return (Position - Origin).Unit
-end
-
-local function getMousePosition()
-    return GetMouseLocation(UserInputService)
-end
-
-local function getFovOrigin()
-    if ScriptState.fovMode == "Center" then
-        local viewportSize = Camera.ViewportSize
-        return Vector2.new(viewportSize.X / 2, viewportSize.Y / 2)
-    end
-
-    return getMousePosition()
-end
-
-local function getTeamComparisonOption()
-    local esp = rawget(getgenv(), "ExunysDeveloperESP")
-    if esp and esp.DeveloperSettings and esp.DeveloperSettings.TeamCheckOption then
-        return esp.DeveloperSettings.TeamCheckOption
-    end
-end
-
-local function playersOnSameTeam(player)
-    if not player then
-        return false
-    end
-
-    local option = getTeamComparisonOption()
-    if option then
-        local okLocal, localValue = pcall(function()
-            return LocalPlayer[option]
-        end)
-        local okTarget, targetValue = pcall(function()
-            return player[option]
-        end)
-
-        if okLocal and okTarget and localValue ~= nil and targetValue ~= nil then
-            return targetValue == localValue
-        end
-    end
-
-    local okLocalTeam, localTeam = pcall(function()
-        return LocalPlayer.Team
-    end)
-    local okTargetTeam, targetTeam = pcall(function()
-        return player.Team
-    end)
-
-    if okLocalTeam and okTargetTeam and localTeam and targetTeam then
-        return targetTeam == localTeam
-    end
-
-    local okLocalColor, localColor = pcall(function()
-        return LocalPlayer.TeamColor
-    end)
-    local okTargetColor, targetColor = pcall(function()
-        return player.TeamColor
-    end)
-
-    if okLocalColor and okTargetColor and localColor and targetColor then
-        return targetColor == localColor
-    end
-
-    return false
-end
-
-local function IsPlayerVisible(Player)
-    local PlayerCharacter = Player and Player.Character
-    local LocalPlayerCharacter = LocalPlayer.Character
-
-    if not (PlayerCharacter and LocalPlayerCharacter) then
-        return false
-    end
-
-    local targetPartOption = (Options and Options.TargetPart and Options.TargetPart.Value) or SilentAimSettings.TargetPart or "HumanoidRootPart"
-    local PlayerRoot = FindFirstChild(PlayerCharacter, targetPartOption) or FindFirstChild(PlayerCharacter, "HumanoidRootPart")
-
-    if not PlayerRoot then
-        return false
-    end
-
-    local CastPoints, IgnoreList = { PlayerRoot.Position, LocalPlayerCharacter, PlayerCharacter }, { LocalPlayerCharacter, PlayerCharacter }
-    local ObscuringObjects = #GetPartsObscuringTarget(Camera, CastPoints, IgnoreList)
-
-    return ObscuringObjects == 0
-end
-
-local function normalizeSelection(selection)
-    if not selection then
-        return {}
-    end
-
-    local normalized = {}
-
-    if type(selection) ~= "table" then
-        normalized[selection] = true
-        return normalized
-    end
-
-    local hasNumericKeys = false
-    for key in pairs(selection) do
-        if type(key) == "number" then
-            hasNumericKeys = true
-            break
-        end
-    end
-
-    if hasNumericKeys then
-        for _, value in ipairs(selection) do
-            normalized[value] = true
-        end
-    else
-        for key, value in pairs(selection) do
-            if type(key) == "string" then
-                if value == true then
-                    normalized[key] = true
-                elseif type(value) == "string" then
-                    normalized[value] = true
-                end
-            end
-        end
-    end
-
-    return normalized
-end
-
-local function isSelectionActive(selection, option)
-    return selection and selection[option] or false
-end
-
-SilentAimSettings.BlockedMethods = normalizeSelection(SilentAimSettings.BlockedMethods)
-SilentAimSettings.Include = normalizeSelection(SilentAimSettings.Include)
-SilentAimSettings.Origin = normalizeSelection(SilentAimSettings.Origin)
-
-local function getClosestPlayer(config)
-    config = config or {}
-
-    local targetPartOption = config.targetPart or (Options and Options.TargetPart and Options.TargetPart.Value) or SilentAimSettings.TargetPart
-    if not targetPartOption then
-        return nil, nil
-    end
-
-    local ignoredPlayers = config.ignoredPlayers or (Options and Options.PlayerDropdown and Options.PlayerDropdown.Value)
-    local radiusOption = config.radius or (Options and Options.Radius and Options.Radius.Value) or SilentAimSettings.FOVRadius or 2000
-    local visibleCheck = config.visibleCheck
-    if visibleCheck == nil then
-        visibleCheck = SilentAimSettings.VisibleCheck
-    end
-    local aliveCheck = config.aliveCheck
-    if aliveCheck == nil then
-        aliveCheck = SilentAimSettings.AliveCheck
-    end
-    local teamCheck = config.teamCheck
-    if teamCheck == nil then
-        local silentAimTeamCheck = SilentAimSettings.TeamCheck
-        local aimLockTeamCheck = ScriptState and ScriptState.aimLockTeamCheck
-        local toggleValue = Toggles and Toggles.TeamCheck and Toggles.TeamCheck.Value
-        teamCheck = (toggleValue ~= nil and toggleValue) or silentAimTeamCheck or aimLockTeamCheck or false
-    end
-
-    local teamEvaluator = config.teamEvaluator
-    if type(teamEvaluator) ~= "function" then
-        teamEvaluator = playersOnSameTeam
-    end
-
-    local originPosition = config.origin
-    if typeof(originPosition) == "function" then
-        originPosition = originPosition()
-    end
-    originPosition = originPosition or getFovOrigin()
-
-    local ClosestPart
-    local ClosestPlayer
-    local DistanceToMouse
-
-    for _, Player in next, GetPlayers(Players) do
-        if Player == LocalPlayer then
-            continue
-        end
-
-        if ignoredPlayers and ignoredPlayers[Player.Name] then
-            continue
-        end
-
-        if teamCheck and teamEvaluator(Player) then
-            continue
-        end
-
-        if visibleCheck and not IsPlayerVisible(Player) then
-            continue
-        end
-
-        local Character = Player.Character
-        if not Character then
-            continue
-        end
-
-        local HumanoidRootPart = FindFirstChild(Character, "HumanoidRootPart")
-        local Humanoid = FindFirstChild(Character, "Humanoid")
-
-        if not HumanoidRootPart or not Humanoid then
-            continue
-        end
-
-        if aliveCheck and Humanoid.Health <= 0 then
-            continue
-        end
-
-        local ScreenPosition, OnScreen = getPositionOnScreen(HumanoidRootPart.Position)
-        if not OnScreen then
-            continue
-        end
-
-        local Distance = (originPosition - ScreenPosition).Magnitude
-        if Distance <= (DistanceToMouse or radiusOption) then
-            local targetPartName
-            if targetPartOption == "Random" then
-                targetPartName = ValidTargetParts[math.random(1, #ValidTargetParts)]
-            else
-                targetPartName = targetPartOption
-            end
-
-            local candidatePart = Character[targetPartName]
-            if candidatePart then
-                ClosestPart = candidatePart
-                ClosestPlayer = Player
-                DistanceToMouse = Distance
-            end
-        end
-    end
-
-    return ClosestPart, ClosestPlayer
-end
-local function getBodyPart(character, part)
-    return character:FindFirstChild(part) and part or "Head"
-end
-
-local function getNearestPlayerToMouse()
-    local _, player = getClosestPlayer({
-        targetPart = ScriptState.bodyPartSelected,
-        visibleCheck = ScriptState.aimLockVisibleCheck,
-        aliveCheck = ScriptState.aimLockAliveCheck,
-        teamCheck = ScriptState.aimLockTeamCheck
-    })
-    if player and player ~= LocalPlayer then
-        return player
-    end
-
-    return nil
-end
-
-local function acquireLockTarget()
-    local player = getNearestPlayerToMouse()
-    if player and player.Character then
-        local partName = getBodyPart(player.Character, ScriptState.bodyPartSelected)
-        local targetPart = player.Character:FindFirstChild(partName)
-
-        if targetPart then
-            ScriptState.isLockedOn = true
-            ScriptState.targetPlayer = player
-            return true
-        end
-    end
-
-    ScriptState.isLockedOn = false
-    ScriptState.targetPlayer = nil
-    return false
-end
-
-local function toggleLockOnPlayer(forceState)
-    local desiredState = forceState
-    if desiredState == nil then
-        desiredState = not ScriptState.lockEnabled
-    end
-
-    ScriptState.lockEnabled = desiredState
-
-    if desiredState then
-        acquireLockTarget()
-    else
-        ScriptState.isLockedOn = false
-        ScriptState.targetPlayer = nil
-    end
-
-    if Toggles.aimLockKeyToggle and Toggles.aimLockKeyToggle.Value ~= desiredState then
-        Toggles.aimLockKeyToggle:SetValue(desiredState)
-    end
-end
-
-
-RunService.RenderStepped:Connect(function()
-    if ScriptState.lockEnabled and not ScriptState.isLockedOn then
-        acquireLockTarget()
-    end
-
-    if ScriptState.lockEnabled and ScriptState.isLockedOn and ScriptState.targetPlayer and ScriptState.targetPlayer.Character then
-        if ScriptState.aimLockTeamCheck and ScriptState.targetPlayer.Team == LocalPlayer.Team then
-            ScriptState.isLockedOn = false
-            ScriptState.targetPlayer = nil
-            return
-        end
-
-        if ScriptState.aimLockVisibleCheck and not IsPlayerVisible(ScriptState.targetPlayer) then
-            ScriptState.isLockedOn = false
-            ScriptState.targetPlayer = nil
-            return
-        end
-
-        local partName = getBodyPart(ScriptState.targetPlayer.Character, ScriptState.bodyPartSelected)
-        local part = ScriptState.targetPlayer.Character:FindFirstChild(partName)
-
-        if part and ScriptState.targetPlayer.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
-            local predictedPosition = part.Position + (part.AssemblyLinearVelocity * ScriptState.predictionFactor)
-            local currentCameraPosition = Camera.CFrame.Position
-
-            Camera.CFrame = CFrame.new(currentCameraPosition, predictedPosition) * CFrame.new(0, 0, ScriptState.smoothingFactor)
-        else
-            ScriptState.isLockedOn = false
-            ScriptState.targetPlayer = nil
-        end
-    end
-end)
-
-
-
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWareUI-Lib/refs/heads/main/PasteWareUIlib.lua"))()
-local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWareUI-Lib/refs/heads/main/manage2.lua"))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWareUI-Lib/refs/heads/main/manager.lua"))()
-local Window = Library:CreateWindow({
-    Title = 'Qxcky Privat',
-    Center = true,
-    AutoShow = true,
-    TabPadding = 8,
-    MenuFadeTime = 0.2
-})
-
-local GeneralTab = Window:AddTab("Main")
-local aimbox = GeneralTab:AddRightGroupbox("AimLock")
-local velbox = GeneralTab:AddRightGroupbox("Anti Lock")
-local frabox = GeneralTab:AddRightGroupbox("Movement")
-local ExploitTab = Window:AddTab("Exploits")
-
-------------------------------------------------------
--- 🔥 PASTEWARE FLY SYSTEM (Key: E + Speed Selector)
-------------------------------------------------------
-
-local flyBox = ExploitTab:AddLeftGroupbox("Fly")
-
-getgenv().PW_FlyEnabled = false
-getgenv().PW_FlySpeed = 3
-
--- UI: Toggle Fly
-flyBox:AddToggle("PW_FlyToggle", {
-    Text = "Enable Fly (E)",
-    Default = false,
-    Tooltip = "Press E to toggle fly mode.",
-    Callback = function(val)
-        getgenv().PW_FlyEnabled = val
-    end
-})
-
--- UI: Fly speed
-flyBox:AddSlider("PW_FlySpeedSlider", {
-    Text = "Fly Speed",
-    Default = 3,
-    Min = 1,
-    Max = 20,
-    Rounding = 1,
-    Tooltip = "How fast you fly.",
-    Callback = function(val)
-        getgenv().PW_FlySpeed = val
-    end
-})
-
--- Detect keybind (E)
-UserInputService.InputBegan:Connect(function(input, typing)
-    if typing then return end
-    if input.KeyCode == Enum.KeyCode.E then
-        local newState = not Toggles.PW_FlyToggle.Value
-        Toggles.PW_FlyToggle:SetValue(newState)
-        getgenv().PW_FlyEnabled = newState
-    end
-end)
-
--- Fly Movement Handler
-RunService.RenderStepped:Connect(function()
-    if getgenv().PW_FlyEnabled then
-        local chr = LocalPlayer.Character
-        local hrp = chr and chr:FindFirstChild("HumanoidRootPart")
-        if not hrp then return end
-
-        local cam = workspace.CurrentCamera
-        local speed = getgenv().PW_FlySpeed
-
-        -- movement vector
-        local move = Vector3.zero
-
-        if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-            move += cam.CFrame.LookVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-            move -= cam.CFrame.LookVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-            move -= cam.CFrame.RightVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-            move += cam.CFrame.RightVector
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
-            move += Vector3.new(0,1,0)
-        end
-        if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then
-            move -= Vector3.new(0,1,0)
-        end
-
-        if move.Magnitude > 0 then
-            move = move.Unit * speed
-        end
-
-        -- apply movement
-        hrp.CFrame = hrp.CFrame + move
-        hrp.AssemblyLinearVelocity = Vector3.zero
-    end
-end)
-local ACSEngineBox = ExploitTab:AddLeftGroupbox("ACS Engine")
-local VisualsTab = Window:AddTab("Visuals")
-----------------------------------------------------------------------
--- 🔥 UNIVERSAL PLAYER HIGHLIGHT SYSTEM (supports ON/OFF + COLORS)
--- Integrates directly into your Visuals Tab
-----------------------------------------------------------------------
-
-local highlightFolder = Instance.new("Folder")
-highlightFolder.Name = "PW_Highlights"
-highlightFolder.Parent = game.CoreGui
-
-local function createHighlight(char, color, fillTrans, outlineTrans)
-    if not char then return end
-
-    if char:FindFirstChild("Highlight") then
-        char.Highlight:Destroy()
-    end
-
-    local h = Instance.new("Highlight")
-    h.Parent = highlightFolder
-    h.Adornee = char
-    h.FillColor = color
-    h.FillTransparency = fillTrans
-    h.OutlineColor = color
-    h.OutlineTransparency = outlineTrans
-    return h
-end
-
-local function applyToAll(color, fT, oT)
-    for _, plr in ipairs(Players:GetPlayers()) do
-        if plr.Character then
-            createHighlight(plr.Character, color, fT, oT)
-        end
-        plr.CharacterAdded:Connect(function(char)
-            task.wait(0.3)
-            createHighlight(char, color, fT, oT)
-        end)
-    end
-end
-
-local function deleteAll()
-    for _, obj in ipairs(highlightFolder:GetChildren()) do
-        obj:Destroy()
-    end
-end
-
-----------------------------------------------------------------------
--- UI ELEMENTS IN VISUALS TAB
-----------------------------------------------------------------------
-
-local highlightGroup = VisualsTab:AddLeftGroupbox("Player Highlights")
-
------------------------------------------------------------
--- 🔥 CORNER BOX ESP (premium style)
------------------------------------------------------------
-
-local cornerGroup = VisualsTab:AddLeftGroupbox("Corner Box ESP")
-
-getgenv().PW_CornerBoxEnabled = false
-getgenv().PW_CornerBoxColor = Color3.fromRGB(255, 0, 255)
-getgenv().PW_CornerBoxThickness = 2
-getgenv().PW_CornerLength = 12
-
-local CornerBoxes = {}
-
-local function newLine()
-    local l = Drawing.new("Line")
-    l.Visible = false
-    l.Color = getgenv().PW_CornerBoxColor
-    l.Thickness = getgenv().PW_CornerBoxThickness
-    l.ZIndex = 999999
-    return l
-end
-
--- 8 linii pentru 4 colțuri
-local function newCornerBox()
-    return {
-        TL1 = newLine(), TL2 = newLine(), -- top-left
-        TR1 = newLine(), TR2 = newLine(), -- top-right
-        BL1 = newLine(), BL2 = newLine(), -- bottom-left
-        BR1 = newLine(), BR2 = newLine()  -- bottom-right
-    }
-end
-
-local function clearCorner(plr)
-    if CornerBoxes[plr] then
-        for _, line in pairs(CornerBoxes[plr]) do
-            line:Remove()
-        end
-        CornerBoxes[plr] = nil
-    end
-end
-
-local function refreshCornerLines(box)
-    for _, line in pairs(box) do
-        line.Color = getgenv().PW_CornerBoxColor
-        line.Thickness = getgenv().PW_CornerBoxThickness
-    end
-end
-
-local function updateCorner(plr)
-    if not getgenv().PW_CornerBoxEnabled then return end
-    if plr == LocalPlayer then return end
-
-    local char = plr.Character
-    if not char then return end
-
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local humanoid = char:FindFirstChild("Humanoid")
-    if not hrp or not humanoid then return end
-
-    local cam = workspace.CurrentCamera
-    local pos, onScreen = cam:WorldToViewportPoint(hrp.Position)
-
-    local box = CornerBoxes[plr]
-    if not box then
-        CornerBoxes[plr] = newCornerBox()
-        box = CornerBoxes[plr]
-    end
-
-    if not onScreen then
-        for _, l in pairs(box) do l.Visible = false end
-        return
-    end
-
-    local scale = math.clamp(6 / pos.Z, 2, 6)
-    local w = 30 * scale
-    local h = 50 * scale
-    local x = pos.X - w / 2
-    local y = pos.Y - h / 1.5
-    local len = getgenv().PW_CornerLength
-
-    refreshCornerLines(box)
-
-    -- Top-left corner
-    box.TL1.From = Vector2.new(x, y)
-    box.TL1.To   = Vector2.new(x + len, y)
-    box.TL2.From = Vector2.new(x, y)
-    box.TL2.To   = Vector2.new(x, y + len)
-
-    -- Top-right corner
-    box.TR1.From = Vector2.new(x + w, y)
-    box.TR1.To   = Vector2.new(x + w - len, y)
-    box.TR2.From = Vector2.new(x + w, y)
-    box.TR2.To   = Vector2.new(x + w, y + len)
-
-    -- Bottom-left corner
-    box.BL1.From = Vector2.new(x, y + h)
-    box.BL1.To   = Vector2.new(x + len, y + h)
-    box.BL2.From = Vector2.new(x, y + h)
-    box.BL2.To   = Vector2.new(x, y + h - len)
-
-    -- Bottom-right corner
-    box.BR1.From = Vector2.new(x + w, y + h)
-    box.BR1.To   = Vector2.new(x + w - len, y + h)
-    box.BR2.From = Vector2.new(x + w, y + h)
-    box.BR2.To   = Vector2.new(x + w, y + h - len)
-
-    for _, l in pairs(box) do
-        l.Visible = true
-    end
-end
-
--- Setup
-for _, plr in ipairs(Players:GetPlayers()) do
-    if plr ~= LocalPlayer then
-        CornerBoxes[plr] = newCornerBox()
-    end
-end
-
-Players.PlayerAdded:Connect(function(plr)
-    CornerBoxes[plr] = newCornerBox()
-end)
-
-Players.PlayerRemoving:Connect(clearCorner)
-
-RunService.RenderStepped:Connect(function()
-    if not getgenv().PW_CornerBoxEnabled then
-        for _, box in pairs(CornerBoxes) do
-            for _, line in pairs(box) do line.Visible = false end
-        end
-        return
-    end
-
-    for _, plr in ipairs(Players:GetPlayers()) do
-        updateCorner(plr)
-    end
-end)
-
------------------------------------------------------------
--- UI OPTIONS
------------------------------------------------------------
-
-cornerGroup:AddToggle("CornerBoxToggle", {
-    Text = "Enable Corner Box ESP",
-    Default = false,
-    Callback = function(val)
-        getgenv().PW_CornerBoxEnabled = val
-    end
-})
-
-cornerGroup:AddLabel("Corner Box Color"):AddColorPicker("CornerBoxColor", {
-    Default = Color3.fromRGB(255, 0, 255),
-    Callback = function(c)
-        getgenv().PW_CornerBoxColor = c
-    end
-})
-
-cornerGroup:AddSlider("CornerBoxThickness", {
-    Text = "Line Thickness",
-    Default = 2,
-    Min = 1,
-    Max = 6,
-    Rounding = 0,
-    Callback = function(v)
-        getgenv().PW_CornerBoxThickness = v
-    end
-})
-
-cornerGroup:AddSlider("CornerLength", {
-    Text = "Corner Length",
-    Default = 12,
-    Min = 5,
-    Max = 30,
-    Rounding = 0,
-    Callback = function(v)
-        getgenv().PW_CornerLength = v
-    end
-})
-
-
------------------------------------------------------------
--- 🔥 SKELETON ESP (Next to Highlight)
------------------------------------------------------------
-
-local skeletonGroup = VisualsTab:AddLeftGroupbox("Skeleton ESP")
-
-getgenv().PW_SkeletonEnabled = false
-getgenv().PW_SkeletonColor = Color3.fromRGB(0, 255, 255)
-getgenv().PW_SkeletonThickness = 1
-
-local skeletons = {}
-
-local function newLine()
-    local line = Drawing.new("Line")
-    line.Visible = false
-    line.Color = getgenv().PW_SkeletonColor
-    line.Thickness = getgenv().PW_SkeletonThickness
-    line.ZIndex = 999999
-    return line
-end
-
-local function clearSkeleton(plr)
-    if skeletons[plr] then
-        for _, l in ipairs(skeletons[plr]) do
-            l:Remove()
-        end
-        skeletons[plr] = nil
-    end
-end
-
-local function initSkeleton(plr)
-    clearSkeleton(plr)
-    skeletons[plr] = {
-        Head = newLine(),
-        Torso = newLine(),
-        LeftArm = newLine(),
-        RightArm = newLine(),
-        LeftLeg = newLine(),
-        RightLeg = newLine(),
-    }
-end
-
-local function updateSkeleton(plr)
-    if not getgenv().PW_SkeletonEnabled then return end
-    if plr == LocalPlayer then return end
-
-    local char = plr.Character
-    if not char then return end
-
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local head = char:FindFirstChild("Head")
-    local la = char:FindFirstChild("LeftUpperArm")
-    local ra = char:FindFirstChild("RightUpperArm")
-    local ll = char:FindFirstChild("LeftUpperLeg")
-    local rl = char:FindFirstChild("RightUpperLeg")
-
-    if not (hrp and head and la and ra and ll and rl) then return end
-
-    local s = skeletons[plr]
-    if not s then 
-        initSkeleton(plr)
-        s = skeletons[plr]
-    end
-
-    local function toScreen(pos)
-        local v, onScreen = workspace.CurrentCamera:WorldToViewportPoint(pos)
-        return Vector2.new(v.X, v.Y), onScreen
-    end
-
-    local headPos, hOn = toScreen(head.Position)
-    local torsoPos, tOn = toScreen(hrp.Position)
-
-    local laPos, laOn = toScreen(la.Position)
-    local raPos, raOn = toScreen(ra.Position)
-    local llPos, llOn = toScreen(ll.Position)
-    local rlPos, rlOn = toScreen(rl.Position)
-
-    -- display only if visible
-    local visible = hOn or tOn
-
-    local function draw(line, a, b)
-        line.Visible = visible
-        line.Color = getgenv().PW_SkeletonColor
-        line.Thickness = getgenv().PW_SkeletonThickness
-        line.From = a
-        line.To = b
-    end
-
-    draw(s.Head, headPos, torsoPos)
-    draw(s.Torso, torsoPos, torsoPos + Vector2.new(0, 25))
-
-    draw(s.LeftArm, torsoPos, laPos)
-    draw(s.RightArm, torsoPos, raPos)
-
-    draw(s.LeftLeg, torsoPos + Vector2.new(0, 25), llPos)
-    draw(s.RightLeg, torsoPos + Vector2.new(0, 25), rlPos)
-end
-
-for _, plr in ipairs(Players:GetPlayers()) do
-    if plr ~= LocalPlayer then initSkeleton(plr) end
-end
-
-Players.PlayerAdded:Connect(function(plr)
-    plr.CharacterAdded:Connect(function()
-        task.wait(1)
-        initSkeleton(plr)
-    end)
-end)
-
-Players.PlayerRemoving:Connect(clearSkeleton)
-
-RunService.RenderStepped:Connect(function()
-    if not getgenv().PW_SkeletonEnabled then
-        for plr, _ in pairs(skeletons) do
-            clearSkeleton(plr)
-        end
-        return
-    end
-
-    for _, plr in ipairs(Players:GetPlayers()) do
-        updateSkeleton(plr)
-    end
-end)
-
------------------------------------------------------------
--- UI OPTIONS
------------------------------------------------------------
-
-skeletonGroup:AddToggle("SkeletonToggle", {
-    Text = "Enable Skeleton ESP",
-    Default = false,
-    Callback = function(val)
-        getgenv().PW_SkeletonEnabled = val
-        if not val then
-            for plr,_ in pairs(skeletons) do
-                clearSkeleton(plr)
-            end
-        end
-    end
-})
-
-skeletonGroup:AddLabel("Skeleton Color"):AddColorPicker("SkeletonColor", {
-    Default = Color3.fromRGB(0,255,255),
-    Callback = function(c)
-        getgenv().PW_SkeletonColor = c
-    end
-})
-
-skeletonGroup:AddSlider("SkeletonThickness", {
-    Text = "Line Thickness",
-    Default = 1,
-    Min = 1,
-    Max = 5,
-    Rounding = 0,
-    Callback = function(v)
-        getgenv().PW_SkeletonThickness = v
-    end
-})
-
-
-highlightGroup:AddToggle("HighlightEnabled", {
-    Text = "Enable Highlights",
-    Default = false,
-    Tooltip = "Shows outlines around all players.",
-    Callback = function(state)
-        if state then
-            applyToAll(
-                Options.HighlightColor.Value,
-                Options.HighlightFillTransparency.Value,
-                Options.HighlightOutlineTransparency.Value
-            )
-        else
-            deleteAll()
-        end
-    end
-})
-
-highlightGroup:AddLabel("Highlight Color"):AddColorPicker("HighlightColor", {
-    Default = Color3.fromRGB(255, 80, 80),
-    Callback = function(c)
-        if Toggles.HighlightEnabled.Value then
-            applyToAll(
-                c,
-                Options.HighlightFillTransparency.Value,
-                Options.HighlightOutlineTransparency.Value
-            )
-        end
-    end
-})
-
-highlightGroup:AddSlider("HighlightFillTransparency", {
-    Text = "Fill Transparency",
-    Default = 0.5,
-    Min = 0,
-    Max = 1,
-    Rounding = 2,
-    Callback = function(v)
-        if Toggles.HighlightEnabled.Value then
-            applyToAll(
-                Options.HighlightColor.Value,
-                v,
-                Options.HighlightOutlineTransparency.Value
-            )
-        end
-    end
-})
-
-highlightGroup:AddSlider("HighlightOutlineTransparency", {
-    Text = "Outline Transparency",
-    Default = 0,
-    Min = 0,
-    Max = 1,
-    Rounding = 2,
-    Callback = function(v)
-        if Toggles.HighlightEnabled.Value then
-            applyToAll(
-                Options.HighlightColor.Value,
-                Options.HighlightFillTransparency.Value,
-                v
-            )
-        end
-    end
-})
-
-local settingsTab = Window:AddTab("Settings")
-local MenuGroup = settingsTab:AddLeftGroupbox("Menu")
-MenuGroup:AddButton("Unload", function() Library:Unload() end)
-MenuGroup:AddLabel("Menu bind"):AddKeyPicker("MenuKeybind", { Default = "None", NoUI = true, Text = "Menu keybind" })
-MenuGroup:AddToggle("ShowKeybinds", {
-    Text = "Show Keybinds",
-    Default = Library.KeybindFrame and Library.KeybindFrame.Visible or false,
-    Callback = function(value)
-        Library:SetKeybindListVisible(value)
-    end,
-})
-
-if Library.KeybindFrame and Toggles.ShowKeybinds then
-    Library:SetKeybindListVisible(Toggles.ShowKeybinds.Value)
-end
-
-Library.ToggleKeybind = Options.MenuKeybind
-ThemeManager:SetLibrary(Library)
-SaveManager:SetLibrary(Library)
-ThemeManager:ApplyToTab(settingsTab)
-SaveManager:BuildConfigSection(settingsTab)
-
-local lastAimLockKeyState = false
-local lastAimLockKeyMode = ScriptState.aimLockKeyMode
-
-aimbox:AddToggle("aimLockKeyToggle", {
-    Text = "aimlock",
-    Default = false,
-    Tooltip = "Toggle AimLock on or off.",
-    Callback = function(value)
-        if ScriptState.lockEnabled == value then
-            return
-        end
-        toggleLockOnPlayer(value)
-    end,
-}):AddKeyPicker("aimLock_KeyPicker", {
-    Default = "None",
-    SyncToggleState = true,
-    Mode = ScriptState.aimLockKeyMode,
-    Text = "AimLock",
-    Tooltip = "Keybind for AimLock",
-    Callback = function()
-        if Options.aimLock_KeyPicker.Mode == "Toggle" then
-            toggleLockOnPlayer(Options.aimLock_KeyPicker:GetState())
-        end
-    end,
-    ChangedCallback = function()
-        lastAimLockKeyState = Options.aimLock_KeyPicker:GetState()
-    end
-})
-
-lastAimLockKeyState = Options.aimLock_KeyPicker:GetState()
-lastAimLockKeyMode = Options.aimLock_KeyPicker.Mode or lastAimLockKeyMode
-ScriptState.aimLockKeyMode = lastAimLockKeyMode
-
-RunService.RenderStepped:Connect(function()
-    local keyPicker = Options.aimLock_KeyPicker
-    if not keyPicker then
-        return
-    end
-
-    local currentMode = keyPicker.Mode or "Toggle"
-    if currentMode ~= lastAimLockKeyMode then
-        ScriptState.aimLockKeyMode = currentMode
-        lastAimLockKeyMode = currentMode
-        lastAimLockKeyState = keyPicker:GetState()
-        if lastAimLockKeyState then
-            toggleLockOnPlayer(true)
-        elseif ScriptState.lockEnabled and not lastAimLockKeyState then
-            toggleLockOnPlayer(false)
-        end
-    end
-
-    if currentMode ~= "Toggle" then
-        local currentState = keyPicker:GetState()
-        if currentState ~= lastAimLockKeyState then
-            toggleLockOnPlayer(currentState)
-            lastAimLockKeyState = currentState
-        elseif currentMode == "Always" and not ScriptState.lockEnabled then
-            toggleLockOnPlayer(true)
-            lastAimLockKeyState = keyPicker:GetState()
-        elseif currentMode == "Hold" and currentState then
-            toggleLockOnPlayer(true)
-        end
-    else
-        lastAimLockKeyState = keyPicker:GetState()
-    end
-end)
-
-aimbox:AddSlider("Smoothing", {
-    Text = "Camera Smoothing",
-    Default = 0.1,
-    Min = 0,
-    Max = 1,
-    Rounding = 2,
-    Tooltip = "Adjust camera smoothing factor.",
-    Callback = function(value)
-        ScriptState.smoothingFactor = value
-    end,
-})
-
-
-aimbox:AddSlider("Prediction", {
-    Text = "Prediction Factor",
-    Default = 0.0,
-    Min = 0,
-    Max = 2,
-    Rounding = 2,
-    Tooltip = "Adjust prediction for target movement.",
-    Callback = function(value)
-        ScriptState.predictionFactor = value
-    end,
-})
-
-aimbox:AddToggle("aimLockVisibleCheck", {
-    Text = "Visible Check",
-    Default = ScriptState.aimLockVisibleCheck,
-    Tooltip = "Skip targets blocked by objects.",
-    Callback = function(value)
-        ScriptState.aimLockVisibleCheck = value
-    end
-})
-
-aimbox:AddToggle("aimLockAliveCheck", {
-    Text = "Alive Check",
-    Default = ScriptState.aimLockAliveCheck,
-    Tooltip = "Ignore eliminated targets.",
-    Callback = function(value)
-        ScriptState.aimLockAliveCheck = value
-    end
-})
-
-aimbox:AddToggle("aimLockTeamCheck", {
-    Text = "Team Check",
-    Default = ScriptState.aimLockTeamCheck,
-    Tooltip = "Avoid locking teammates.",
-    Callback = function(value)
-        ScriptState.aimLockTeamCheck = value
-        if value and ScriptState.lockEnabled and ScriptState.targetPlayer and ScriptState.targetPlayer.Team == LocalPlayer.Team then
-            acquireLockTarget()
-        end
-    end
-})
-
-aimbox:AddDropdown("BodyParts", {
-    Values = {"Head", "UpperTorso", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg", "LeftUpperArm"},
-    Default = "Head",
-    Multi = false,
-    Text = "Target Body Part",
-    Tooltip = "Select which body part to lock onto.",
-    Callback = function(value)
-        ScriptState.bodyPartSelected = value
-    end,
-})
-
-getgenv().ScriptState.Desync = false
-
-RunService.Heartbeat:Connect(function()
-    if getgenv().ScriptState.Desync then
-        local player = game.Players.LocalPlayer
-        local character = player.Character
-        if not character then return end
-        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-        if not humanoidRootPart then return end
-        local originalVelocity = humanoidRootPart.Velocity
-
-        local randomOffset = Vector3.new(
-            math.random(-1, 1) * ScriptState.reverseResolveIntensity * 1000,
-            math.random(-1, 1) * ScriptState.reverseResolveIntensity * 1000,
-            math.random(-1, 1) * ScriptState.reverseResolveIntensity * 1000
-        )
-        humanoidRootPart.Velocity = randomOffset
-        humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.Angles(
-            0,
-            math.random(-1, 1) * ScriptState.reverseResolveIntensity * 0.001,
-            0
-        )
-        RunService.RenderStepped:Wait()
-        humanoidRootPart.Velocity = originalVelocity
-    end
-end)
-
-
-velbox:AddToggle("desyncEnabled", {
-    Text = "Desync",
-    Default = false,
-    Tooltip = "Enable or disable reverse resolve desync.",
-    Callback = function(value)
-        getgenv().ScriptState.Desync = value
-    end
-}):AddKeyPicker("desyncToggleKey", {
-    Default = "None",
-    SyncToggleState = true,
-    Mode = "Toggle",
-    Text = "Desync Toggle Key",
-    Tooltip = "Toggle to enable/disable velocity desync.",
-    Callback = function(value)
-        getgenv().ScriptState.Desync = value
-    end
-})
-
-
-velbox:AddSlider("ReverseResolveIntensity", {
-    Text = "velocity intensity",
-    Default = 5,
-    Min = 1,
-    Max = 10,
-    Rounding = 0,
-    Tooltip = "Adjust the intensity of the reverse resolve effect.",
-    Callback = function(value)
-        ScriptState.reverseResolveIntensity = value
-    end
-})
-
-
-
-RunService.RenderStepped:Connect(function()
-    if ScriptState.isLockedOn and ScriptState.targetPlayer and ScriptState.targetPlayer.Character then
-        local partName = getBodyPart(ScriptState.targetPlayer.Character, ScriptState.bodyPartSelected)
-        local part = ScriptState.targetPlayer.Character:FindFirstChild(partName)
-
-        if part and ScriptState.targetPlayer.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
-            local predictedPosition = part.Position + (part.AssemblyLinearVelocity * ScriptState.predictionFactor)
-
-            if ScriptState.antiLockEnabled then
-                if ScriptState.resolverMethod == "Recalculate" then
-
-                    predictedPosition = predictedPosition + (part.AssemblyLinearVelocity * ScriptState.resolverIntensity)
-                elseif ScriptState.resolverMethod == "Randomize" then
-
-                    predictedPosition = predictedPosition + Vector3.new(
-                        math.random() * ScriptState.resolverIntensity - (ScriptState.resolverIntensity / 2),
-                        math.random() * ScriptState.resolverIntensity - (ScriptState.resolverIntensity / 2),
-                        math.random() * ScriptState.resolverIntensity - (ScriptState.resolverIntensity / 2)
-                    )
-                elseif ScriptState.resolverMethod == "Invert" then
-
-                    predictedPosition = predictedPosition - (part.AssemblyLinearVelocity * ScriptState.resolverIntensity * 2)
-                end
-            end
-
-            local currentCameraPosition = Camera.CFrame.Position
-            Camera.CFrame = CFrame.new(currentCameraPosition, predictedPosition) * CFrame.new(0, 0, ScriptState.smoothingFactor)
-        else
-            ScriptState.isLockedOn = false
-            ScriptState.targetPlayer = nil
-        end
-    end
-end)
-
-aimbox:AddToggle("antiLock_Enabled", {
-    Text = "Anti Lock Resolver",
-    Default = false,
-    Tooltip = "Toggle the Anti Lock Resolver on or off.",
-    Callback = function(value)
-        ScriptState.antiLockEnabled = value
-    end,
-})
-
-aimbox:AddSlider("ResolverIntensity", {
-    Text = "Resolver Intensity",
-    Default = 1.0,
-    Min = 0,
-    Max = 5,
-    Rounding = 2,
-    Tooltip = "Adjust the intensity of the Anti Lock Resolver.",
-    Callback = function(value)
-        ScriptState.resolverIntensity = value
-    end,
-})
-
-aimbox:AddDropdown("ResolverMethods", {
-    Values = {"Recalculate", "Randomize", "Invert"},
-    Default = "Recalculate",
-    Multi = false,
-    Text = "Resolver Method",
-    Tooltip = "Select the method used by the Anti Lock Resolver.",
-    Callback = function(value)
-        ScriptState.resolverMethod = value
-    end,
-})
-
-
-local MainBOX = GeneralTab:AddLeftTabbox("Silent Aim")
-local Main = MainBOX:AddTab("Silent Aim")
-
-local silentAimToggle = Main:AddToggle("silentAimEnabled", {
-    Text = "Silent Aim",
-    Default = SilentAimSettings.Enabled,
-    Callback = function(value)
-        SilentAimSettings.Enabled = value
-    end
-})
-
-silentAimToggle:AddKeyPicker("silentAim_KeyPicker", {
-    Default = SilentAimSettings.ToggleKey or "None",
-    SyncToggleState = true,
-    Mode = SilentAimSettings.KeyMode or "Toggle",
-    Text = "Enabled",
-    NoUI = false,
-    Callback = function(state)
-        if silentAimToggle.Value ~= state then
-            silentAimToggle:SetValue(state)
-        end
-    end,
-    ChangedCallback = function()
-        SilentAimSettings.ToggleKey = Options.silentAim_KeyPicker.Value
-        SilentAimSettings.KeyMode = Options.silentAim_KeyPicker.Mode
-    end
-})
-
-SilentAimSettings.ToggleKey = Options.silentAim_KeyPicker.Value
-
-Main:AddToggle("TeamCheck", {
-    Text = "Team Check",
-    Default = SilentAimSettings.TeamCheck
-}):OnChanged(function()
-    SilentAimSettings.TeamCheck = Toggles.TeamCheck.Value
-end)
-
-Main:AddToggle("VisibleCheck", {
-    Text = "Visible Check",
-    Default = SilentAimSettings.VisibleCheck,
-    Tooltip = "Only target players that are visible"
-}):OnChanged(function()
-    SilentAimSettings.VisibleCheck = Toggles.VisibleCheck.Value
-end)
-
-Main:AddToggle("AliveCheck", {
-    Text = "Alive Check",
-    Default = SilentAimSettings.AliveCheck,
-    Tooltip = "Ignore players with zero health"
-}):OnChanged(function()
-    SilentAimSettings.AliveCheck = Toggles.AliveCheck.Value
-end)
-
-Main:AddToggle("BulletTP", {
-    Text = "Bullet Teleport",
-    Default = SilentAimSettings.BulletTP,
-    Tooltip = "Teleports bullet origin to target"
-}):OnChanged(function()
-    SilentAimSettings.BulletTP = Toggles.BulletTP.Value
-end)
-
-Main:AddToggle("CheckForFireFunc", {
-    Text = "Check For Fire Function",
-    Default = SilentAimSettings.CheckForFireFunc,
-    Tooltip = "Checks if the method is called from a fire function"
-}):OnChanged(function()
-    SilentAimSettings.CheckForFireFunc = Toggles.CheckForFireFunc.Value
-end)
-
-Main:AddDropdown("TargetPart", {
-    AllowNull = true,
-    Text = "Target Part",
-    Default = SilentAimSettings.TargetPart,
-    Values = {"Head", "HumanoidRootPart", "Random"}
-}):OnChanged(function()
-    SilentAimSettings.TargetPart = Options.TargetPart.Value
-end)
-
-Main:AddDropdown("Method", {
-    AllowNull = true,
-    Text = "Silent Aim Method",
-    Default = SilentAimSettings.SilentAimMethod,
-    Values = {
-        "ViewportPointToRay",
-        "ScreenPointToRay",
-        "Raycast",
-        "FindPartOnRay",
-        "FindPartOnRayWithIgnoreList",
-        "FindPartOnRayWithWhitelist",
-        "CounterBlox"
-    }
-}):OnChanged(function()
-    SilentAimSettings.SilentAimMethod = Options.Method.Value
-end)
-
-if not SilentAimSettings.BlockedMethods then
-    SilentAimSettings.BlockedMethods = {}
-end
-
-Main:AddDropdown("Blocked Methods", {
-    AllowNull = true,
-    Multi = true,
-    Text = "Blocked Methods",
-    Default = SilentAimSettings.BlockedMethods,
-    Values = {
-        "BulkMoveTo",
-        "PivotTo",
-        "TranslateBy",
-        "SetPrimaryPartCFrame"
-    }
-}):OnChanged(function()
-    SilentAimSettings.BlockedMethods = normalizeSelection(Options["Blocked Methods"].Value)
-end)
-
-Main:AddDropdown("Include", {
-    AllowNull = true,
-    Multi = true,
-    Text = "Include",
-    Default = SilentAimSettings.Include,
-    Values = {"Camera", "Character"},
-    Tooltip = "Includes these objects in the ignore list"
-}):OnChanged(function()
-    SilentAimSettings.Include = normalizeSelection(Options.Include.Value)
-end)
-
-Main:AddDropdown("Origin", {
-    AllowNull = true,
-    Multi = true,
-    Text = "Origin",
-    Default = SilentAimSettings.Origin,
-    Values = {"Camera"},
-    Tooltip = "Sets the origin of the bullet"
-}):OnChanged(function()
-    SilentAimSettings.Origin = normalizeSelection(Options.Origin.Value)
-end)
-
-Main:AddSlider("MultiplyUnitBy", {
-    Text = "Multiply Unit By",
-    Default = SilentAimSettings.MultiplyUnitBy,
-    Min = 1,
-    Max = 10000,
-    Rounding = 0,
-    Compact = false,
-    Tooltip = "Multiplies the direction vector by this value"
-}):OnChanged(function()
-    SilentAimSettings.MultiplyUnitBy = Options.MultiplyUnitBy.Value
-end)
-
-Main:AddSlider("HitChance", {
-    Text = "Hit Chance",
-    Default = 100,
-    Min = 0,
-    Max = 100,
-    Rounding = 1,
-    Compact = false,
-}):OnChanged(function()
-    SilentAimSettings.HitChance = Options.HitChance.Value
-end)
-
-local FieldOfViewBOX = GeneralTab:AddLeftTabbox("Field Of View") do
-    local Main = FieldOfViewBOX:AddTab("Visuals")
-
-    Main:AddToggle("Visible", {Text = "Show FOV Circle"})
-        :AddColorPicker("Color", {Default = Color3.fromRGB(54, 57, 241)})
-        :OnChanged(function()
-            fov_circle.Visible = Toggles.Visible.Value
-            SilentAimSettings.FOVVisible = Toggles.Visible.Value
-        end)
-
-    Main:AddSlider("Radius", {
-        Text = "FOV Circle Radius",
-        Min = 0,
-        Max = 360,
-        Default = 130,
-        Rounding = 0
-    }):OnChanged(function()
-        fov_circle.Radius = Options.Radius.Value
-        SilentAimSettings.FOVRadius = Options.Radius.Value
-    end)
-
-    Main:AddDropdown("FovMode", {
-        Values = {"Mouse", "Center"},
-        Default = ScriptState.fovMode,
-        Text = "FOV Origin",
-        Tooltip = "Choose whether the FOV stays centered or follows the cursor."
-    }):OnChanged(function()
-        ScriptState.fovMode = Options.FovMode.Value
-    end)
-
-    Main:AddToggle("MousePosition", {Text = "Show Silent Aim Target"})
-        :AddColorPicker("MouseVisualizeColor", {Default = Color3.fromRGB(54, 57, 241)})
-        :OnChanged(function()
-            SilentAimSettings.ShowSilentAimTarget = Toggles.MousePosition.Value
-        end)
-
-    Main:AddDropdown("PlayerDropdown", {
-        SpecialType = "Player",
-        Text = "Ignore Player",
-        Tooltip = "Friend list",
-        Multi = true
-    })
-end
-
-local function removeOldHighlight()
-    if ScriptState.previousHighlight then
-        ScriptState.previousHighlight:Destroy()
-        ScriptState.previousHighlight = nil
-    end
-end
-
 task.spawn(function()
-    RenderStepped:Connect(function()
-        if Toggles.MousePosition.Value then
-            local visibleCheckActive = SilentAimSettings.VisibleCheck or ScriptState.aimLockVisibleCheck
-            local teamCheckActive = SilentAimSettings.TeamCheck or ScriptState.aimLockTeamCheck
-            local aliveCheckActive = SilentAimSettings.AliveCheck or ScriptState.aimLockAliveCheck
+    repeat task.wait() until shared.VapeFullyLoaded
+    getgenv().getcustomasset = shared.oldgetcustomasset -- vape bad code moment
+end)
+local CheatEngineMode = false
+if (not getgenv) or (getgenv and type(getgenv) ~= "function") then CheatEngineMode = true end
+if getgenv and not getgenv().shared then CheatEngineMode = true; getgenv().shared = {}; end
+if getgenv and not getgenv().debug then CheatEngineMode = true; getgenv().debug = {traceback = function(string) return string end} end
+if getgenv and not getgenv().require then CheatEngineMode = true; end
+if getgenv and getgenv().require and type(getgenv().require) ~= "function" then CheatEngineMode = true end
+local debugChecks = {
+    Type = "table",
+    Functions = {
+        "getupvalue",
+        "getupvalues",
+        "getconstants",
+        "getproto"
+    }
+}
+local function checkExecutor()
+    if identifyexecutor ~= nil and type(identifyexecutor) == "function" then
+        local suc, res = pcall(function()
+            return identifyexecutor()
+        end)   
+        --local blacklist = {'appleware', 'cryptic', 'delta', 'wave', 'codex', 'swift', 'solara', 'vega'}
+        local blacklist = {'solara', 'cryptic', 'xeno', 'ember', 'ronix'}
+        local core_blacklist = {'solara', 'xeno'}
+        if suc then
+            for i,v in pairs(blacklist) do
+                if string.find(string.lower(tostring(res)), v) then CheatEngineMode = true end
+            end
+            for i,v in pairs(core_blacklist) do
+                if string.find(string.lower(tostring(res)), v) then
+                    pcall(function()
+                        getgenv().queue_on_teleport = function() warn('queue_on_teleport disabled!') end
+                    end)
+                end
+            end
+            if string.find(string.lower(tostring(res)), "delta") then
+                getgenv().isnetworkowner = function()
+                    return true
+                end
+            end
+        end
+    end
+end
+task.spawn(function() pcall(checkExecutor) end)
+task.spawn(function() pcall(function() if isfile("VW_API_KEY.txt") then delfile("VW_API_KEY.txt") end end) end)
+local function checkRequire()
+    if CheatEngineMode then return end
+    local bedwarsID = {
+        game = {6872274481, 8444591321, 8560631822},
+        lobby = {6872265039}
+    }
+    if table.find(bedwarsID.game, game.PlaceId) then
+        repeat task.wait() until game:GetService("Players").LocalPlayer.Character
+        repeat task.wait() until game:GetService("Players").LocalPlayer.PlayerGui and game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("TopBarAppGui")
+        local suc, data = pcall(function()
+            return require(game:GetService("ReplicatedStorage").TS.remotes).default.Client
+        end)
+        if (not suc) or type(data) ~= 'table' or (not data.Get) then CheatEngineMode = true end
+    end
+end
+--task.spawn(function() pcall(checkRequire) end)
+pcall(checkRequire)
+local function checkDebug()
+    if CheatEngineMode then return end
+    if not getgenv().debug then 
+        CheatEngineMode = true 
+    else 
+        if type(debug) ~= debugChecks.Type then 
+            CheatEngineMode = true
+        else 
+            for i, v in pairs(debugChecks.Functions) do
+                if not debug[v] or (debug[v] and type(debug[v]) ~= "function") then 
+                    CheatEngineMode = true 
+                else
+                    local suc, res = pcall(debug[v]) 
+                    if tostring(res) == "Not Implemented" then 
+                        CheatEngineMode = true 
+                    end
+                end
+            end
+        end
+    end
+end
+task.spawn(function()
+    pcall(function()
+        local Services = setmetatable({}, {
+            __index = function(self, key)
+                local suc, service = pcall(game.GetService, game, key)
+                if suc and service then
+                    self[key] = service
+                    return service
+                else
+                    warn(`[Services] Warning: "{key}" is not a valid Roblox service.`)
+                    return nil
+                end
+            end
+        })
 
-            local closestPart, closestPlayer = getClosestPlayer({
-                visibleCheck = visibleCheckActive,
-                teamCheck = teamCheckActive,
-                aliveCheck = aliveCheckActive
-            })
-            if closestPart and closestPlayer then
-                local char = closestPlayer.Character or closestPart.Parent
-                if char and char:FindFirstChild("Humanoid") and char:FindFirstChild("HumanoidRootPart") then
-                    if teamCheckActive and playersOnSameTeam(closestPlayer) then
-                        removeOldHighlight()
-                        return
-                    end
-                    if visibleCheckActive and not IsPlayerVisible(closestPlayer) then
-                        removeOldHighlight()
-                        return
-                    end
-                    if SilentAimSettings.VisibleCheck and not IsPlayerVisible(closestPlayer) then
-                        removeOldHighlight()
-                        return
-                    end
-                    local Root = char.PrimaryPart or char:FindFirstChild("HumanoidRootPart")
-                    if Root then
-                        local RootToViewportPoint, IsOnScreen = WorldToViewportPoint(Camera, Root.Position)
-                        removeOldHighlight()
-                        if IsOnScreen then
-                            local highlight = char:FindFirstChildOfClass("Highlight")
-                            if not highlight then
-                                highlight = Instance.new("Highlight")
-                                highlight.Parent = char
-                                highlight.Adornee = char
+        local Players = Services.Players
+        local TextChatService = Services.TextChatService
+        local ChatService = Services.ChatService
+        repeat
+            task.wait()
+        until game:IsLoaded() and Players.LocalPlayer ~= nil
+        local chatVersion = TextChatService and TextChatService.ChatVersion or Enum.ChatVersion.LegacyChatService
+        local TagRegister = shared.TagRegister or {}
+        if shared.FORCE_LOAD_CHAT_TAG or not shared.CheatEngineMode then
+            local function richTextColor(color)
+                return string.format("rgb(%d,%d,%d)", math.floor(color.R * 255 + 0.5), math.floor(color.G * 255 + 0.5), math.floor(color.B * 255 + 0.5))
+            end
+            
+            local function tableValues(tbl)
+                local values = {}
+                for key, _ in pairs(tbl) do
+                    table.insert(values, key)
+                end
+                return values
+            end
+            
+            local ChatTagType = {
+                VIP = true,
+                TRANSLATOR = true,
+                DEV = true,
+                ["AC MOD"] = true,
+                ["LEAD AC MOD"] = true,
+                BUILDER = true,
+                ["EMOTE ARTIST"] = true,
+                FAMOUS = true,
+                ["COMMUNITY MANAGER"] = true,
+                PATRON = true,
+            }
+            
+            local ChatTagMeta = {
+                VIP = {displayOrder = 1},
+                TRANSLATOR = {displayOrder = 2},
+                DEV = {displayOrder = 3},
+                ["AC MOD"] = {displayOrder = 4},
+                ["LEAD AC MOD"] = {displayOrder = 5},
+                BUILDER = {displayOrder = 6},
+                ["EMOTE ARTIST"] = {displayOrder = 7},
+                FAMOUS = {displayOrder = 8},
+                ["COMMUNITY MANAGER"] = {displayOrder = 9},
+                PATRON = {displayOrder = 10},
+            }
+            
+            local function getGamePrefixTags(plr)
+                local tagsFolder = plr:FindFirstChild("Tags")
+                if not tagsFolder then
+                    return ""
+                end
+                local types = tableValues(ChatTagType)
+                local function sortFunc(a, b)
+                    return (ChatTagMeta[a] and ChatTagMeta[a].displayOrder or 999) < (ChatTagMeta[b] and ChatTagMeta[b].displayOrder or 999)
+                end
+                table.sort(types, sortFunc)
+                local result = ""
+                for _, typeName in ipairs(types) do
+                    local bestTag = nil
+                    for _, tag in ipairs(tagsFolder:GetChildren()) do
+                        if tag.Name == tostring(typeName) and tag:IsA("StringValue") then
+                            local isBest = bestTag == nil
+                            if not isBest then
+                                local bestPri = bestTag:GetAttribute("TagPriority") or 0
+                                local thisPri = tag:GetAttribute("TagPriority") or 0
+                                isBest = bestPri < thisPri
                             end
-                            highlight.FillColor = Options.MouseVisualizeColor.Value
-                            highlight.FillTransparency = 0.5
-                            highlight.OutlineColor = Options.MouseVisualizeColor.Value
-                            highlight.OutlineTransparency = 0
-                            ScriptState.previousHighlight = highlight
+                            if isBest then
+                                bestTag = tag
+                            end
                         end
                     end
+                    if bestTag then
+                        result = result .. bestTag.Value .. " "
+                    end
                 end
-            else
-                removeOldHighlight()
+                return result
             end
-        end
-        if Toggles.Visible.Value then
-            fov_circle.Visible = Toggles.Visible.Value
-            fov_circle.Color = Options.Color.Value
-            fov_circle.Position = getFovOrigin()
+            
+            --if chatVersion == Enum.ChatVersion.TextChatService then
+                TextChatService.OnIncomingMessage = function(data)
+                    TagRegister = shared.TagRegister or {}
+                    local properties = Instance.new("TextChatMessageProperties")
+                    local TextSource = data.TextSource
+                    local PrefixText = data.PrefixText or ""
+                    if TextSource then
+                        local plr = Players:GetPlayerByUserId(TextSource.UserId)
+                        if plr then
+                            local nameColor = plr:GetAttribute("ChatNameColor")
+                            if nameColor then
+                                local colorStr = richTextColor(nameColor)
+                                PrefixText = "<font color='" .. colorStr .. "'>" .. PrefixText .. "</font>"
+                            end
+                            local gameTags = getGamePrefixTags(plr)
+                            local customPrefix = ""
+                            if TagRegister[plr] then
+                                customPrefix = customPrefix .. TagRegister[plr]
+                            end
+                            local fullPrefix = customPrefix .. gameTags .. PrefixText
+                            properties.PrefixText = fullPrefix
+                        else
+                            properties.PrefixText = PrefixText
+                        end
+                    end
+                    properties.Text = data.Text
+                    return properties
+                end
+            --[[elseif chatVersion == Enum.ChatVersion.LegacyChatService then
+                ChatService:RegisterProcessCommandsFunction("CustomPrefix", function(speakerName, message)
+                    TagRegister = shared.TagRegister or {}
+                    local plr = Players:FindFirstChild(speakerName)
+                    if plr then
+                        local prefix = ""
+                        if TagRegister[plr] then
+                            prefix = prefix .. TagRegister[plr]
+                        end
+                        if plr:GetAttribute("__OwnsVIPGamepass") and plr:GetAttribute("VIPChatTag") ~= false then
+                            prefix = prefix .. "[VIP] "
+                        end
+                        local currentLevel = plr:GetAttribute("_CurrentLevel")
+                        if currentLevel then
+                            prefix = prefix .. string.format("[%s] ", tostring(currentLevel))
+                        end
+                        local playerTagValue = plr:FindFirstChild("PlayerTagValue")
+                        if playerTagValue and playerTagValue.Value then
+                            prefix = prefix .. string.format("[#%s] ", tostring(playerTagValue.Value))
+                        end
+                        prefix = prefix .. speakerName
+                        return prefix .. " " .. message
+                    end
+                    return message
+                end)
+            end--]]
         end
     end)
 end)
-local sounds = {
-    ["RIFK7"] = "rbxassetid://9102080552",
-    ["Bubble"] = "rbxassetid://9102092728",
-    ["Minecraft"] = "rbxassetid://5869422451",
-    ["Cod"] = "rbxassetid://160432334",
-    ["Bameware"] = "rbxassetid://6565367558",
-    ["Neverlose"] = "rbxassetid://6565370984",
-    ["Gamesense"] = "rbxassetid://4817809188",
-    ["Rust"] = "rbxassetid://6565371338",
-}
-
-local hitSound = Instance.new("Sound")
-hitSound.Volume = 3
-hitSound.Parent = SoundService
-
-local HitSoundBox = GeneralTab:AddRightTabbox("HitSound") do
-    local Main = HitSoundBox:AddTab("HitSound [beta]")
-
-    Main:AddToggle("HitSoundEnabled", {Text = "Enable HitSound", Default = false})
-
-    Main:AddDropdown("HitSoundSelect", {
-        Values = {"RIFK7","Bubble","Minecraft","Cod","Bameware","Neverlose","Gamesense","Rust"},
-        Default = "Neverlose",
-        Text = "HitSound",
-        Tooltip = "Choose sound"
-    }):OnChanged(function()
-        local id = sounds[Options.HitSoundSelect.Value]
-        if id then
-            hitSound.SoundId = id
-        end
-    end)
+--pcall(function() if game:GetService("Players").LocalPlayer.Name == "RealYoBadassAtWars" then game:GetService("Players").LocalPlayer:Kick("Blacklisted from erchodev#0 [Voidware Onwer]") end end)
+if (not CheatEngineMode) then checkDebug() end
+local baseDirectory = shared.RiseMode and "rise/" or "vape/"
+if (not isfolder('vape')) then makefolder('vape') end
+if (not isfolder('rise')) then makefolder('rise') end
+if shared.ForceDisableCE then CheatEngineMode = false; shared.CheatEngineMode = false end
+shared.CheatEngineMode = shared.CheatEngineMode or CheatEngineMode
+local errorPopupShown = false
+local setidentity = syn and syn.set_thread_identity or set_thread_identity or setidentity or setthreadidentity or function() end
+local getidentity = syn and syn.get_thread_identity or get_thread_identity or getidentity or getthreadidentity or function() return 8 end
+local isfile = isfile or function(file)
+	local suc, res = pcall(function() return readfile(file) end)
+	return suc and res ~= nil
 end
-
-hitSound.SoundId = sounds[Options.HitSoundSelect.Value]
-
-
-local soundPool = {}
-local soundIndex = 1
-
-local function getNextSound()
-    if soundIndex > #soundPool then
-        local s = hitSound:Clone()
-        s.Parent = workspace
-        s.Looped = false
-        table.insert(soundPool, s)
-    end
-    local s = soundPool[soundIndex]
-    soundIndex = soundIndex + 1
-    return s
-end
-
-local function playHitSound()
-    local s = getNextSound()
-    s:Stop()
-    s:Play()
-end
-
-local function trackPlayer(plr)
-    if plr == LocalPlayer then return end
-
-    plr.CharacterAdded:Connect(function(char)
-        local hum = char:WaitForChild("Humanoid", 10)
-        if not hum then return end
-
-        local lastHealth = hum.Health
-
-        hum.HealthChanged:Connect(function(newHp)
-            if Toggles.HitSoundEnabled.Value then
-                local closestPart, closestPlayer = getClosestPlayer()
-                if closestPart and closestPlayer and closestPlayer == plr then
-                    if newHp < lastHealth then
-                        playHitSound()
-                    end
-                    if lastHealth > 0 and newHp <= 0 then
-                        playHitSound()
-                    end
-                end
-            end
-            lastHealth = newHp
-        end)
-    end)
-end
-
-for _, plr in ipairs(Players:GetPlayers()) do
-    trackPlayer(plr)
-end
-Players.PlayerAdded:Connect(trackPlayer)
-
-RunService.Heartbeat:Connect(function()
-    if Toggles.silentAimEnabled and Toggles.silentAimEnabled.Value then
-        local closestPart = getClosestPlayer()
-        ScriptState.ClosestHitPart = closestPart
-    else
-        ScriptState.ClosestHitPart = nil
-    end
-end)
-
-local oldNamecall
-oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
-    local Method, Arguments = getnamecallmethod(), {...}
-    local self, chance = Arguments[1], CalculateChance(SilentAimSettings.HitChance)
-
-    local BlockedMethods = SilentAimSettings.BlockedMethods or {}
-    if Method == "Destroy" and self == Client then
-        return
-    end
-    if BlockedMethods[Method] then
-        return
-    end
-
-    local function getIgnoredList()
-        if Method == "Raycast" then
-            local params = Arguments[4]
-            if typeof(params) == "RaycastParams" then
-                return params.FilterDescendantsInstances
-            end
-        elseif Method == "FindPartOnRayWithIgnoreList" then
-            return Arguments[3]
-        end
-    end
-
-    local function getOriginalOrigin()
-        if Method == "Raycast" then
-            return Arguments[2]
-        end
-
-        if Method == "FindPartOnRayWithIgnoreList" or Method == "FindPartOnRayWithWhitelist" or Method == "FindPartOnRay" or Method == "findPartOnRay" then
-            local ray = Arguments[2]
-            if typeof(ray) == "Ray" then
-                return ray.Origin
-            end
-        end
-
-        return nil
-    end
-
-    local allowedFireCall = true
-    if SilentAimSettings.CheckForFireFunc and (Method == "FindPartOnRay" or Method == "findPartOnRay" or Method == "FindPartOnRayWithWhitelist" or Method == "FindPartOnRayWithIgnoreList" or Method == "Raycast" or Method == "ViewportPointToRay" or Method == "ScreenPointToRay") then
-        local trace = tostring(debug.traceback()):lower()
-        if trace:find("bullet") or trace:find("gun") or trace:find("fire") then
-            allowedFireCall = true
+local delfile = delfile or function(file) writefile(file, "") end
+if not isfolder(baseDirectory) then makefolder(baseDirectory) end
+local VWFunctions = {}
+function VWFunctions.CreateID()
+    pcall(function()
+        local HWID = tostring(game:GetService("RbxAnalyticsService"):GetClientId())
+        local headers = {
+            ["Content-type"] = "application/json",
+            ["Authorization"] = "Bearer blankwontddosthis:3"
+        }
+        local data = {["client_id"] = tostring(HWID), ["user_id"] = tonumber(game:GetService("Players").LocalPlayer.UserId)}
+        local final_data = game:GetService("HttpService"):JSONEncode(data)
+        local url = "https://api.vapevoidware.xyz/create_id"
+        local a = request({
+            Url = url,
+            Method = 'POST',
+            Headers = headers,
+            Body = final_data
+        })
+        
+        if a['StatusCode'] == 200 then
+            writefile(baseDirectory..'id.txt', game:GetService("HttpService"):JSONDecode(a["Body"])["id"])
         else
-            return oldNamecall(...)
+            writefile(baseDirectory..'id.txt', "discord")
         end
-    end
-
-    if Toggles.silentAimEnabled and Toggles.silentAimEnabled.Value and self == workspace and not checkcaller() and chance and allowedFireCall then
-        local HitPart = ScriptState.ClosestHitPart or getClosestPlayer()
-        if HitPart then
-            local ignoredList = getIgnoredList()
-            local originOptions = SilentAimSettings.Origin
-            local includeOptions = SilentAimSettings.Include
-            local originalOrigin = getOriginalOrigin()
-
-            if originalOrigin and originOptions and next(originOptions) then
-                local matchesOrigin = false
-                if isSelectionActive(originOptions, "Camera") and originalOrigin == Camera.CFrame.p then
-                    matchesOrigin = true
-                end
-
-                if not matchesOrigin then
-                    return oldNamecall(...)
-                end
-            end
-
-            if ignoredList and includeOptions and next(includeOptions) then
-                if isSelectionActive(includeOptions, "Camera") and not table.find(ignoredList, Camera) then
-                    return oldNamecall(...)
-                end
-
-                local character = LocalPlayer.Character
-                if character and isSelectionActive(includeOptions, "Character") and not table.find(ignoredList, character) then
-                    return oldNamecall(...)
-                end
-            end
-
-            local function computeRay(origin)
-                local adjustedOrigin = origin
-                if SilentAimSettings.BulletTP then
-                    adjustedOrigin = (HitPart.CFrame * CFrame.new(0, 0, 1)).p
-                end
-
-                local multiplier = SilentAimSettings.MultiplyUnitBy or 1000
-                local direction = getDirection(adjustedOrigin, HitPart.Position) * multiplier
-                return adjustedOrigin, direction
-            end
-
-            if Method == "FindPartOnRayWithIgnoreList" and SilentAimSettings.SilentAimMethod == Method then
-                if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRayWithIgnoreList) then
-                    local Origin, Direction = computeRay(Arguments[2].Origin)
-                    Arguments[2] = Ray.new(Origin, Direction)
-                    return oldNamecall(unpack(Arguments))
-                end
-            elseif Method == "FindPartOnRayWithWhitelist" and SilentAimSettings.SilentAimMethod == Method then
-                if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRayWithWhitelist) then
-                    local Origin, Direction = computeRay(Arguments[2].Origin)
-                    Arguments[2] = Ray.new(Origin, Direction)
-                    return oldNamecall(unpack(Arguments))
-                end
-            elseif (Method == "FindPartOnRay" or Method == "findPartOnRay") and SilentAimSettings.SilentAimMethod:lower() == Method:lower() then
-                if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRay) then
-                    local Origin, Direction = computeRay(Arguments[2].Origin)
-                    Arguments[2] = Ray.new(Origin, Direction)
-                    return oldNamecall(unpack(Arguments))
-                end
-            elseif Method == "Raycast" and SilentAimSettings.SilentAimMethod == Method then
-                if ValidateArguments(Arguments, ExpectedArguments.Raycast) then
-                    local Origin, Direction = computeRay(Arguments[2])
-                    Arguments[2], Arguments[3] = Origin, Direction
-                    return oldNamecall(unpack(Arguments))
-                end
-            elseif Method == "ViewportPointToRay" and SilentAimSettings.SilentAimMethod == Method then
-                if ValidateArguments(Arguments, ExpectedArguments.ViewportPointToRay) then
-                    local Origin = Camera.CFrame.p
-                    local NewOrigin, Direction = computeRay(Origin)
-                    return Ray.new(NewOrigin, Direction)
-                end
-            elseif Method == "ScreenPointToRay" and SilentAimSettings.SilentAimMethod == Method then
-                if ValidateArguments(Arguments, ExpectedArguments.ScreenPointToRay) then
-                    local Origin = Camera.CFrame.p
-                    local NewOrigin, Direction = computeRay(Origin)
-                    return Ray.new(NewOrigin, Direction)
-                end
-            elseif Method == "FindPartOnRayWithIgnoreList" and SilentAimSettings.SilentAimMethod == "CounterBlox" then
-                local Origin, Direction = computeRay(Arguments[2].Origin)
-                Arguments[2] = Ray.new(Origin, Direction)
-                return oldNamecall(unpack(Arguments))
-            end
-        end
-    end
-
-    return oldNamecall(...)
-end))
-
-
-local worldbox = VisualsTab:AddRightGroupbox("World")
-
-local lighting = Services.Lighting
-ScriptState.lockedTime, ScriptState.fovValue, ScriptState.nebulaEnabled = 12, 70, false
-local originalAmbient, originalOutdoorAmbient = lighting.Ambient, lighting.OutdoorAmbient
-local originalFogStart, originalFogEnd, originalFogColor = lighting.FogStart, lighting.FogEnd, lighting.FogColor
-local nebulaThemeColor = Color3.fromRGB(173, 216, 230)
-
-worldbox:AddSlider("world_time", {
-    Text = "Clock Time", Default = 12, Min = 0, Max = 24, Rounding = 1,
-    Callback = function(v)
-        ScriptState.lockedTime = v
-        if ScriptState.lockTimeEnabled then
-            lighting.ClockTime = v
-        end
-    end
-})
-
-local oldNewIndex
-oldNewIndex = hookmetamethod(game, "__newindex", function(self, property, value)
-    if not checkcaller() and self == lighting and property == "ClockTime" then
-        if ScriptState.lockTimeEnabled then
-            value = ScriptState.lockedTime
-        end
-    end
-    return oldNewIndex(self, property, value)
-end)
-
-worldbox:AddSlider("fov_slider", {
-    Text = "FOV", Default = 70, Min = 30, Max = 120, Rounding = 2,
-    Callback = function(v) ScriptState.fovValue = v end,
-})
-
-worldbox:AddToggle("lock_time_toggle", {
-    Text = "Lock Time",
-    Default = false,
-    Callback = function(v)
-        ScriptState.lockTimeEnabled = v
-        if v then
-            lighting.ClockTime = ScriptState.lockedTime
-        end
-    end
-})
-
-worldbox:AddToggle("fov_toggle", {
-    Text = "FOV Change", Default = false,
-    Callback = function(state) ScriptState.fovEnabled = state end,
-})
-
-RunService.RenderStepped:Connect(function()
-    if ScriptState.fovEnabled then
-        Camera.FieldOfView = ScriptState.fovValue
-    end
-end)
-
-
-worldbox:AddToggle("nebula_theme", {
-    Text = "Nebula Theme", Default = false,
-    Callback = function(state)
-        ScriptState.nebulaEnabled = state
-        if state then
-            local b = Instance.new("BloomEffect", lighting) b.Intensity, b.Size, b.Threshold, b.Name = 0.7, 24, 1, "NebulaBloom"
-            local c = Instance.new("ColorCorrectionEffect", lighting) c.Saturation, c.Contrast, c.TintColor, c.Name = 0.5, 0.2, nebulaThemeColor, "NebulaColorCorrection"
-            local a = Instance.new("Atmosphere", lighting) a.Density, a.Offset, a.Glare, a.Haze, a.Color, a.Decay, a.Name = 0.4, 0.25, 1, 2, nebulaThemeColor, Color3.fromRGB(25, 25, 112), "NebulaAtmosphere"
-            lighting.Ambient, lighting.OutdoorAmbient = nebulaThemeColor, nebulaThemeColor
-            lighting.FogStart, lighting.FogEnd = 100, 500
-            lighting.FogColor = nebulaThemeColor
+        --[[elseif a['StatusCode'] == 403 then
+            game:GetService("Players").LocalPlayer:Kick("Voidware Error]: Error doing step1 Error code: 1986")
+        elseif a['StatusCode'] == 401 then
+            game:GetService("Players").LocalPlayer:Kick("Voidware Error]: Error doing step1 Error code: 1922")
+        elseif a['StatusCode'] == 429 then
+            game:GetService("Players").LocalPlayer:Kick("Voidware Error]: Error doing step1 Error code: 1954 Please rejoin!")
         else
-            for _, v in pairs({"NebulaBloom", "NebulaColorCorrection", "NebulaAtmosphere"}) do
-                local obj = lighting:FindFirstChild(v) if obj then obj:Destroy() end
-            end
-            lighting.Ambient, lighting.OutdoorAmbient = originalAmbient, originalOutdoorAmbient
-            lighting.FogStart, lighting.FogEnd = originalFogStart, originalFogEnd
-            lighting.FogColor = originalFogColor
-        end
-    end,
-}):AddColorPicker("nebula_color_picker", {
-    Text = "Nebula Color", Default = Color3.fromRGB(173, 216, 230),
-    Callback = function(c)
-        nebulaThemeColor = c
-        if ScriptState.nebulaEnabled then
-            local nc = lighting:FindFirstChild("NebulaColorCorrection") if nc then nc.TintColor = c end
-            local na = lighting:FindFirstChild("NebulaAtmosphere") if na then na.Color = c end
-            lighting.Ambient, lighting.OutdoorAmbient = c, c
-            lighting.FogColor = c
-        end
-    end,
-})
-
-
-local Lighting = Services.Lighting
-local Visuals = {}
-local Skyboxes = {}
-
-function Visuals:NewSky(Data)
-    local Name = Data.Name
-    Skyboxes[Name] = {
-        SkyboxBk = Data.SkyboxBk,
-        SkyboxDn = Data.SkyboxDn,
-        SkyboxFt = Data.SkyboxFt,
-        SkyboxLf = Data.SkyboxLf,
-        SkyboxRt = Data.SkyboxRt,
-        SkyboxUp = Data.SkyboxUp,
-        MoonTextureId = Data.Moon or "rbxasset://sky/moon.jpg",
-        SunTextureId = Data.Sun or "rbxasset://sky/sun.jpg"
-    }
-end
-
-function Visuals:SwitchSkybox(Name)
-    local OldSky = Lighting:FindFirstChildOfClass("Sky")
-    if OldSky then OldSky:Destroy() end
-
-    local Sky = Instance.new("Sky", Lighting)
-    for Index, Value in pairs(Skyboxes[Name]) do
-        Sky[Index] = Value
-    end
-end
-
-if Lighting:FindFirstChildOfClass("Sky") then
-    local OldSky = Lighting:FindFirstChildOfClass("Sky")
-    Visuals:NewSky({
-        Name = "Game's Default Sky",
-        SkyboxBk = OldSky.SkyboxBk,
-        SkyboxDn = OldSky.SkyboxDn,
-        SkyboxFt = OldSky.SkyboxFt,
-        SkyboxLf = OldSky.SkyboxLf,
-        SkyboxRt = OldSky.SkyboxRt,
-        SkyboxUp = OldSky.SkyboxUp
-    })
-end
-
-Visuals:NewSky({
-    Name = "Sunset",
-    SkyboxBk = "rbxassetid://600830446",
-    SkyboxDn = "rbxassetid://600831635",
-    SkyboxFt = "rbxassetid://600832720",
-    SkyboxLf = "rbxassetid://600886090",
-    SkyboxRt = "rbxassetid://600833862",
-    SkyboxUp = "rbxassetid://600835177"
-})
-
-Visuals:NewSky({
-    Name = "Arctic",
-    SkyboxBk = "http://www.roblox.com/asset/?id=225469390",
-    SkyboxDn = "http://www.roblox.com/asset/?id=225469395",
-    SkyboxFt = "http://www.roblox.com/asset/?id=225469403",
-    SkyboxLf = "http://www.roblox.com/asset/?id=225469450",
-    SkyboxRt = "http://www.roblox.com/asset/?id=225469471",
-    SkyboxUp = "http://www.roblox.com/asset/?id=225469481"
-})
-
-Visuals:NewSky({
-    Name = "Space",
-    SkyboxBk = "http://www.roblox.com/asset/?id=166509999",
-    SkyboxDn = "http://www.roblox.com/asset/?id=166510057",
-    SkyboxFt = "http://www.roblox.com/asset/?id=166510116",
-    SkyboxLf = "http://www.roblox.com/asset/?id=166510092",
-    SkyboxRt = "http://www.roblox.com/asset/?id=166510131",
-    SkyboxUp = "http://www.roblox.com/asset/?id=166510114"
-})
-
-Visuals:NewSky({
-    Name = "Roblox Default",
-    SkyboxBk = "rbxasset://textures/sky/sky512_bk.tex",
-    SkyboxDn = "rbxasset://textures/sky/sky512_dn.tex",
-    SkyboxFt = "rbxasset://textures/sky/sky512_ft.tex",
-    SkyboxLf = "rbxasset://textures/sky/sky512_lf.tex",
-    SkyboxRt = "rbxasset://textures/sky/sky512_rt.tex",
-    SkyboxUp = "rbxasset://textures/sky/sky512_up.tex"
-})
-
-Visuals:NewSky({
-    Name = "Red Night",
-    SkyboxBk = "http://www.roblox.com/Asset/?ID=401664839";
-    SkyboxDn = "http://www.roblox.com/Asset/?ID=401664862";
-    SkyboxFt = "http://www.roblox.com/Asset/?ID=401664960";
-    SkyboxLf = "http://www.roblox.com/Asset/?ID=401664881";
-    SkyboxRt = "http://www.roblox.com/Asset/?ID=401664901";
-    SkyboxUp = "http://www.roblox.com/Asset/?ID=401664936";
-})
-
-Visuals:NewSky({
-    Name = "Deep Space",
-    SkyboxBk = "http://www.roblox.com/asset/?id=149397692";
-    SkyboxDn = "http://www.roblox.com/asset/?id=149397686";
-    SkyboxFt = "http://www.roblox.com/asset/?id=149397697";
-    SkyboxLf = "http://www.roblox.com/asset/?id=149397684";
-    SkyboxRt = "http://www.roblox.com/asset/?id=149397688";
-    SkyboxUp = "http://www.roblox.com/asset/?id=149397702";
-})
-
-Visuals:NewSky({
-    Name = "Pink Skies",
-    SkyboxBk = "http://www.roblox.com/asset/?id=151165214";
-    SkyboxDn = "http://www.roblox.com/asset/?id=151165197";
-    SkyboxFt = "http://www.roblox.com/asset/?id=151165224";
-    SkyboxLf = "http://www.roblox.com/asset/?id=151165191";
-    SkyboxRt = "http://www.roblox.com/asset/?id=151165206";
-    SkyboxUp = "http://www.roblox.com/asset/?id=151165227";
-})
-
-Visuals:NewSky({
-    Name = "Purple Sunset",
-    SkyboxBk = "rbxassetid://264908339";
-    SkyboxDn = "rbxassetid://264907909";
-    SkyboxFt = "rbxassetid://264909420";
-    SkyboxLf = "rbxassetid://264909758";
-    SkyboxRt = "rbxassetid://264908886";
-    SkyboxUp = "rbxassetid://264907379";
-})
-
-Visuals:NewSky({
-    Name = "Blue Night",
-    SkyboxBk = "http://www.roblox.com/Asset/?ID=12064107";
-    SkyboxDn = "http://www.roblox.com/Asset/?ID=12064152";
-    SkyboxFt = "http://www.roblox.com/Asset/?ID=12064121";
-    SkyboxLf = "http://www.roblox.com/Asset/?ID=12063984";
-    SkyboxRt = "http://www.roblox.com/Asset/?ID=12064115";
-    SkyboxUp = "http://www.roblox.com/Asset/?ID=12064131";
-})
-
-Visuals:NewSky({
-    Name = "Blossom Daylight",
-    SkyboxBk = "http://www.roblox.com/asset/?id=271042516";
-    SkyboxDn = "http://www.roblox.com/asset/?id=271077243";
-    SkyboxFt = "http://www.roblox.com/asset/?id=271042556";
-    SkyboxLf = "http://www.roblox.com/asset/?id=271042310";
-    SkyboxRt = "http://www.roblox.com/asset/?id=271042467";
-    SkyboxUp = "http://www.roblox.com/asset/?id=271077958";
-})
-
-Visuals:NewSky({
-    Name = "Blue Nebula",
-    SkyboxBk = "http://www.roblox.com/asset?id=135207744";
-    SkyboxDn = "http://www.roblox.com/asset?id=135207662";
-    SkyboxFt = "http://www.roblox.com/asset?id=135207770";
-    SkyboxLf = "http://www.roblox.com/asset?id=135207615";
-    SkyboxRt = "http://www.roblox.com/asset?id=135207695";
-    SkyboxUp = "http://www.roblox.com/asset?id=135207794";
-})
-
-Visuals:NewSky({
-    Name = "Blue Planet",
-    SkyboxBk = "rbxassetid://218955819";
-    SkyboxDn = "rbxassetid://218953419";
-    SkyboxFt = "rbxassetid://218954524";
-    SkyboxLf = "rbxassetid://218958493";
-    SkyboxRt = "rbxassetid://218957134";
-    SkyboxUp = "rbxassetid://218950090";
-})
-
-Visuals:NewSky({
-    Name = "Deep Space",
-    SkyboxBk = "http://www.roblox.com/asset/?id=159248188";
-    SkyboxDn = "http://www.roblox.com/asset/?id=159248183";
-    SkyboxFt = "http://www.roblox.com/asset/?id=159248187";
-    SkyboxLf = "http://www.roblox.com/asset/?id=159248173";
-    SkyboxRt = "http://www.roblox.com/asset/?id=159248192";
-    SkyboxUp = "http://www.roblox.com/asset/?id=159248176";
-})
-
-local SkyboxNames = {}
-for Name, _ in pairs(Skyboxes) do
-    table.insert(SkyboxNames, Name)
-end
-
-local worldbox = VisualsTab:AddRightGroupbox("SkyBox")
-local SkyboxDropdown = worldbox:AddDropdown("SkyboxSelector", {
-    AllowNull = false,
-    Text = "Select Skybox",
-    Default = "Game's Default Sky",
-    Values = SkyboxNames
-}):OnChanged(function(SelectedSkybox)
-    if Skyboxes[SelectedSkybox] then
-        Visuals:SwitchSkybox(SelectedSkybox)
-    end
-end)
-
-local VisualsEx = VisualsTab:AddLeftGroupbox("ESP")
-
-if not _G.ExunysESPLoaded then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeAngles/PasteWare-v2/refs/heads/main/ExLib.lua"))()
-end
-
-local ESP = getgenv().ExunysDeveloperESP
-if not ESP then return end
-
-local function ensurePath(path)
-    local ref = ESP
-    for index = 1, #path - 1 do
-        local key = path[index]
-        if type(ref[key]) ~= "table" then
-            ref[key] = {}
-        end
-        ref = ref[key]
-    end
-    return ref, path[#path]
-end
-
-local function getProperty(path)
-    local ref = ESP
-    for index = 1, #path do
-        if not ref then return nil end
-        ref = ref[path[index]]
-    end
-    return ref
-end
-
-local function updateProperty(path, value)
-    local ref, key = ensurePath(path)
-    if ref and key then
-        ref[key] = value
-    end
-end
-
-local function makeId(path, suffix)
-    local id = table.concat(path, "_")
-    if suffix then
-        id = id .. "_" .. suffix
-    end
-    return id
-end
-
-local function refreshESPConfiguration()
-    if ESP and ESP.UpdateConfiguration then
-        pcall(function()
-            ESP.UpdateConfiguration(ESP.DeveloperSettings, ESP.Settings, ESP.Properties)
-        end)
-    end
-end
-
-local function refreshChams()
-    if UpdateAllChams then
-        pcall(UpdateAllChams)
-    end
-end
-
-local function addDefinitionControls(group, definitions)
-    for _, def in ipairs(definitions) do
-        local getValue = def.Get or function()
-            return getProperty(def.Path)
-        end
-
-        local setValue = def.Set or function(value)
-            updateProperty(def.Path, value)
-        end
-
-        local id = def.Id or makeId(def.Path, def.Suffix)
-
-        if def.Type == "toggle" then
-            group:AddToggle(id, {
-                Text = def.Name,
-                Default = def.Default ~= nil and def.Default or (getValue() or false),
-                Callback = function(val)
-                    setValue(val)
-                    if def.OnChange then def.OnChange(val) end
-                end
-            })
-        elseif def.Type == "slider" then
-            group:AddSlider(id, {
-                Text = def.Name,
-                Min = def.Min,
-                Max = def.Max,
-                Rounding = def.Rounding or 1,
-                Default = getValue() or def.Default or def.Min or 0,
-                Callback = function(val)
-                    setValue(val)
-                    if def.OnChange then def.OnChange(val) end
-                end
-            })
-        elseif def.Type == "color" then
-            local label = group:AddLabel(def.Name)
-            label:AddColorPicker(id, {
-                Default = getValue() or def.Default or Color3.new(1, 1, 1),
-                Callback = function(val)
-                    setValue(val)
-                    if def.OnChange then def.OnChange(val) end
-                end
-            })
-        elseif def.Type == "dropdown" then
-            local values = def.Values
-            if not values and def.Map then
-                values = {}
-                for option in pairs(def.Map) do
-                    table.insert(values, option)
-                end
-                table.sort(values)
-            end
-
-            local current = getValue()
-            if def.Map then
-                local mapped
-                for option, mappedValue in pairs(def.Map) do
-                    if mappedValue == current then
-                        mapped = option
-                        break
-                    end
-                end
-                current = mapped
-            end
-
-            local dropdown = group:AddDropdown(id, {
-                AllowNull = false,
-                Text = def.Name,
-                Values = values,
-                Default = current or def.Default or (values and values[1])
-            })
-
-            dropdown:OnChanged(function(value)
-                local finalValue = def.Map and def.Map[value] or value
-                setValue(finalValue)
-                if def.OnChange then def.OnChange(finalValue, value) end
-            end)
-        elseif def.Type == "input" then
-            group:AddInput(id, {
-                Text = def.Name,
-                Default = tostring(getValue() or def.Default or ""),
-                Numeric = def.Numeric,
-                Finished = def.Finished,
-                Placeholder = def.Placeholder,
-                Callback = function(val)
-                    local finalValue = def.Numeric and tonumber(val) or val
-                    setValue(finalValue)
-                    if def.OnChange then def.OnChange(finalValue) end
-                end
-            })
-        end
-    end
-end
-
-VisualsEx:AddToggle("espEnabled", {
-    Text = "Enable ESP",
-    Default = ESP.Settings and ESP.Settings.Enabled or false,
-    Callback = function(value)
-        if value and ESP and not ESP.Loaded and ESP.Load then
-            pcall(function()
-                ESP:Load()
-            end)
-        end
-
-        updateProperty({"Settings", "Enabled"}, value)
-        refreshESPConfiguration()
-    end
-})
-
-local DrawingFonts = Drawing and Drawing.Fonts
-local fontMap = {
-    Plex = DrawingFonts and DrawingFonts.Plex or "Plex",
-    System = DrawingFonts and DrawingFonts.System or "System",
-    UI = DrawingFonts and DrawingFonts.UI or "UI",
-    Monospace = DrawingFonts and DrawingFonts.Monospace or "Monospace"
-}
-local fontValues = {"Plex", "System", "UI", "Monospace"}
-
-local tracerPositionMap = {Bottom = 1, Center = 2, Mouse = 3}
-local tracerPositions = {"Bottom", "Center", "Mouse"}
-
-local healthBarPositionMap = {Top = 1, Bottom = 2, Left = 3, Right = 4}
-local healthBarPositions = {"Top", "Bottom", "Left", "Right"}
-
-local ESPSettingsGroup = VisualsTab:AddRightGroupbox("ESP Settings")
-addDefinitionControls(ESPSettingsGroup, {
-    {Type = "toggle", Name = "Parts Only", Path = {"Settings", "PartsOnly"}},
-    {Type = "toggle", Name = "Team Check", Path = {"Settings", "TeamCheck"}, OnChange = function()
-        refreshESPConfiguration()
-        refreshChams()
-    end},
-    {Type = "toggle", Name = "Alive Check", Path = {"Settings", "AliveCheck"}, OnChange = refreshESPConfiguration},
-    {Type = "toggle", Name = "Enable Team Colors", Path = {"Settings", "EnableTeamColors"}, OnChange = function()
-        refreshESPConfiguration()
-        refreshChams()
-    end},
-    {Type = "toggle", Name = "Entity ESP", Path = {"Settings", "EntityESP"}}
-})
-
-local DeveloperSettingsGroup = VisualsTab:AddRightGroupbox("ESP Developer")
-addDefinitionControls(DeveloperSettingsGroup, {
-    {Type = "toggle", Name = "Unwrap On Character Absence", Path = {"DeveloperSettings", "UnwrapOnCharacterAbsence"}, OnChange = refreshESPConfiguration},
-    {Type = "dropdown", Name = "Update Mode", Path = {"DeveloperSettings", "UpdateMode"}, Values = {"RenderStepped", "Heartbeat", "Stepped"}, OnChange = refreshESPConfiguration},
-    {Type = "dropdown", Name = "Team Check Option", Path = {"DeveloperSettings", "TeamCheckOption"}, Values = {"TeamColor", "Team"}, OnChange = refreshESPConfiguration},
-    {Type = "slider", Name = "Rainbow Speed", Path = {"DeveloperSettings", "RainbowSpeed"}, Min = 0.1, Max = 10, Rounding = 1, OnChange = refreshESPConfiguration},
-    {Type = "slider", Name = "Width Boundary", Path = {"DeveloperSettings", "WidthBoundary"}, Min = 0.5, Max = 5, Rounding = 2, OnChange = refreshESPConfiguration},
-    {Type = "input", Name = "Config Path", Path = {"DeveloperSettings", "Path"}}
-})
-
-local ESPVisualGroup = VisualsTab:AddLeftGroupbox("ESP Text")
-addDefinitionControls(ESPVisualGroup, {
-    {Type = "toggle", Name = "Enabled", Path = {"Properties", "ESP", "Enabled"}},
-    {Type = "toggle", Name = "Rainbow Color", Path = {"Properties", "ESP", "RainbowColor"}},
-    {Type = "toggle", Name = "Rainbow Outline", Path = {"Properties", "ESP", "RainbowOutlineColor"}},
-    {Type = "slider", Name = "Offset", Path = {"Properties", "ESP", "Offset"}, Min = 0, Max = 50, Rounding = 0},
-    {Type = "color", Name = "Color", Path = {"Properties", "ESP", "Color"}},
-    {Type = "slider", Name = "Transparency", Path = {"Properties", "ESP", "Transparency"}, Min = 0, Max = 1, Rounding = 2},
-    {Type = "slider", Name = "Size", Path = {"Properties", "ESP", "Size"}, Min = 10, Max = 30, Rounding = 0},
-    {Type = "dropdown", Name = "Font", Path = {"Properties", "ESP", "Font"}, Values = fontValues, Map = fontMap, OnChange = refreshESPConfiguration},
-    {Type = "color", Name = "Outline Color", Path = {"Properties", "ESP", "OutlineColor"}},
-    {Type = "toggle", Name = "Outline", Path = {"Properties", "ESP", "Outline"}},
-    {Type = "toggle", Name = "Display Distance", Path = {"Properties", "ESP", "DisplayDistance"}},
-    {Type = "toggle", Name = "Display Health", Path = {"Properties", "ESP", "DisplayHealth"}},
-    {Type = "toggle", Name = "Display Name", Path = {"Properties", "ESP", "DisplayName"}},
-    {Type = "toggle", Name = "Display DisplayName", Path = {"Properties", "ESP", "DisplayDisplayName"}},
-    {Type = "toggle", Name = "Display Tool", Path = {"Properties", "ESP", "DisplayTool"}}
-})
-
-local TracerGroup = VisualsTab:AddRightGroupbox("ESP Tracer")
-addDefinitionControls(TracerGroup, {
-    {Type = "toggle", Name = "Enabled", Path = {"Properties", "Tracer", "Enabled"}},
-    {Type = "toggle", Name = "Rainbow Color", Path = {"Properties", "Tracer", "RainbowColor"}},
-    {Type = "toggle", Name = "Rainbow Outline", Path = {"Properties", "Tracer", "RainbowOutlineColor"}},
-    {Type = "dropdown", Name = "Position", Path = {"Properties", "Tracer", "Position"}, Values = tracerPositions, Map = tracerPositionMap},
-    {Type = "slider", Name = "Transparency", Path = {"Properties", "Tracer", "Transparency"}, Min = 0, Max = 1, Rounding = 2},
-    {Type = "slider", Name = "Thickness", Path = {"Properties", "Tracer", "Thickness"}, Min = 0, Max = 5, Rounding = 2},
-    {Type = "color", Name = "Color", Path = {"Properties", "Tracer", "Color"}},
-    {Type = "toggle", Name = "Outline", Path = {"Properties", "Tracer", "Outline"}},
-    {Type = "color", Name = "Outline Color", Path = {"Properties", "Tracer", "OutlineColor"}}
-})
-
-local HeadDotGroup = VisualsTab:AddLeftGroupbox("ESP Head Dot")
-addDefinitionControls(HeadDotGroup, {
-    {Type = "toggle", Name = "Enabled", Path = {"Properties", "HeadDot", "Enabled"}},
-    {Type = "toggle", Name = "Rainbow Color", Path = {"Properties", "HeadDot", "RainbowColor"}},
-    {Type = "toggle", Name = "Rainbow Outline", Path = {"Properties", "HeadDot", "RainbowOutlineColor"}},
-    {Type = "color", Name = "Color", Path = {"Properties", "HeadDot", "Color"}},
-    {Type = "slider", Name = "Transparency", Path = {"Properties", "HeadDot", "Transparency"}, Min = 0, Max = 1, Rounding = 2},
-    {Type = "slider", Name = "Thickness", Path = {"Properties", "HeadDot", "Thickness"}, Min = 0, Max = 5, Rounding = 2},
-    {Type = "slider", Name = "Num Sides", Path = {"Properties", "HeadDot", "NumSides"}, Min = 3, Max = 60, Rounding = 0},
-    {Type = "toggle", Name = "Filled", Path = {"Properties", "HeadDot", "Filled"}},
-    {Type = "color", Name = "Outline Color", Path = {"Properties", "HeadDot", "OutlineColor"}},
-    {Type = "toggle", Name = "Outline", Path = {"Properties", "HeadDot", "Outline"}}
-})
-
-local BoxGroup = VisualsTab:AddRightGroupbox("ESP Box")
-addDefinitionControls(BoxGroup, {
-    {Type = "toggle", Name = "Enabled", Path = {"Properties", "Box", "Enabled"}},
-    {Type = "toggle", Name = "Rainbow Color", Path = {"Properties", "Box", "RainbowColor"}},
-    {Type = "toggle", Name = "Rainbow Outline", Path = {"Properties", "Box", "RainbowOutlineColor"}},
-    {Type = "color", Name = "Color", Path = {"Properties", "Box", "Color"}},
-    {Type = "slider", Name = "Transparency", Path = {"Properties", "Box", "Transparency"}, Min = 0, Max = 1, Rounding = 2},
-    {Type = "slider", Name = "Thickness", Path = {"Properties", "Box", "Thickness"}, Min = 0, Max = 5, Rounding = 2},
-    {Type = "toggle", Name = "Filled", Path = {"Properties", "Box", "Filled"}},
-    {Type = "color", Name = "Outline Color", Path = {"Properties", "Box", "OutlineColor"}},
-    {Type = "toggle", Name = "Outline", Path = {"Properties", "Box", "Outline"}}
-})
-
-local HealthBarGroup = VisualsTab:AddLeftGroupbox("ESP Health Bar")
-addDefinitionControls(HealthBarGroup, {
-    {Type = "toggle", Name = "Enabled", Path = {"Properties", "HealthBar", "Enabled"}},
-    {Type = "toggle", Name = "Rainbow Outline", Path = {"Properties", "HealthBar", "RainbowOutlineColor"}},
-    {Type = "slider", Name = "Offset", Path = {"Properties", "HealthBar", "Offset"}, Min = 0, Max = 20, Rounding = 0},
-    {Type = "slider", Name = "Blue", Path = {"Properties", "HealthBar", "Blue"}, Min = 0, Max = 255, Rounding = 0},
-    {Type = "dropdown", Name = "Position", Path = {"Properties", "HealthBar", "Position"}, Values = healthBarPositions, Map = healthBarPositionMap},
-    {Type = "slider", Name = "Thickness", Path = {"Properties", "HealthBar", "Thickness"}, Min = 0, Max = 5, Rounding = 2},
-    {Type = "slider", Name = "Transparency", Path = {"Properties", "HealthBar", "Transparency"}, Min = 0, Max = 1, Rounding = 2},
-    {Type = "color", Name = "Outline Color", Path = {"Properties", "HealthBar", "OutlineColor"}},
-    {Type = "toggle", Name = "Outline", Path = {"Properties", "HealthBar", "Outline"}}
-})
-
-updateProperty({"Properties", "Crosshair", "Enabled"}, false)
-updateProperty({"Properties", "Crosshair", "CenterDot", "Enabled"}, false)
-refreshESPConfiguration()
-local originalProperties = {}
-
-local function HSVToRGB(h, s, v)
-    local c = v * s
-    local x = c * (1 - math.abs((h / 60) % 2 - 1))
-    local m = v - c
-    local r, g, b = 0, 0, 0
-
-    if h < 60 then r, g, b = c, x, 0
-    elseif h < 120 then r, g, b = x, c, 0
-    elseif h < 180 then r, g, b = 0, c, x
-    elseif h < 240 then r, g, b = 0, x, c
-    elseif h < 300 then r, g, b = x, 0, c
-    else r, g, b = c, 0, x end
-
-    return Color3.new(r + m, g + m, b + m)
-end
-
-local function applyChams(char)
-    if not char then return end
-    originalProperties = {}
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            originalProperties[part] = {
-                Color = part.Color,
-                Material = part.Material
+            game:GetService("Players").LocalPlayer:Kick("Voidware Error]: Error doing step1 Error code: 2000".." | "..tostring(a["StatusCode"]))
+        end--]]
+        if shared.api_key then
+            local key = shared.api_key
+            local headers = {
+                ["Content-type"] = "application/json",
+                ["api-key"] = tostring(key)
             }
-            part.Material = Enum.Material.ForceField
-            part.Color = ScriptState.SelfChamsColor
-        end
-    end
-end
-
-local function restoreChams()
-    for part, props in pairs(originalProperties) do
-        if part and part.Parent then
-            part.Color = props.Color
-            part.Material = props.Material
-        end
-    end
-    originalProperties = {}
-end
-
-local function updateChams()
-    if not ScriptState.SelfChamsEnabled then return end
-    for part, _ in pairs(originalProperties) do
-        if part and part.Parent then
-            if ScriptState.RainbowChamsEnabled then
-                local hue = (tick() * 120) % 360
-                part.Color = HSVToRGB(hue, 1, 1)
+        
+            local jsondata = {
+                ["roblox_username"] = tostring(game.Players.LocalPlayer.Name)
+            }
+        
+            local res = request({
+                Url = 'https://whitelist.vapevoidware.xyz/edit_wl',
+                Method = 'POST',
+                Headers = headers,
+                Body = game:GetService("HttpService"):JSONEncode(jsondata)
+            })
+        
+            if res['StatusCode'] == 200 then
+                InfoNotification("Voidware Whitelist", "Successfully whitelisted you upon execution. If you aren't whitelist, rejoin!", 5)
             else
-                part.Color = ScriptState.SelfChamsColor
+                local httpservice = game:GetService('HttpService')
+                errorNotification("Voidware Whitelist", "Failed to whitelist: "..((httpservice:JSONDecode(res.Body).error) or "Unknown error"), 10)
             end
         end
-    end
-end
 
-RunService.RenderStepped:Connect(updateChams)
+        if shared.connection_key then
+            local key = shared.connection_key
+            local headers = {
+                ["Content-type"] = "application/json",
+            }
+        
+            local jsondata = {
+                ["roblox_user_id"] = tonumber(game:GetService("Players").LocalPlayer.UserId),
+                ["connection_key"] = tostring(key),
+            }
+        
+            local res = request({
+                Url = 'https://storage.vapevoidware.xyz/storage/redeem-key',
+                Method = 'POST',
+                Headers = headers,
+                Body = game:GetService("HttpService"):JSONEncode(jsondata)
+            })
 
-LocalPlayer.CharacterAdded:Connect(function(char)
-    if ScriptState.SelfChamsEnabled then
-        task.wait(1)
-        applyChams(char)
-    end
-end)
-
-VisualsEx:AddToggle("selfChamsEnabled", {
-    Text = "Self Chams",
-    Default = false,
-    Callback = function(val)
-        ScriptState.SelfChamsEnabled = val
-        if val then
-            if LocalPlayer.Character then
-                applyChams(LocalPlayer.Character)
+            print(res.Body)
+        
+            if res['StatusCode'] == 200 then
+                InfoNotification("Voidware Connection Key", "Successfully connected key!", 5)
+            else
+                local httpservice = game:GetService('HttpService')
+                errorNotification("Voidware Connection Key", "Failed to connect key: "..((httpservice:JSONDecode(res.Body).error) or "Unknown error"), 10)
             end
-        else
-            restoreChams()
         end
-    end
-})
-
-VisualsEx:AddToggle("rainbowChams", {
-    Text = "Rainbow Chams",
-    Default = false,
-    Callback = function(val)
-        ScriptState.RainbowChamsEnabled = val
-    end
-})
-
-VisualsEx:AddLabel("Self Chams Color"):AddColorPicker("selfChamsColor", {
-    Default = ScriptState.SelfChamsColor,
-    Callback = function(val)
-        ScriptState.SelfChamsColor = val
-    end
-})
-
-local ChamsOccludedColor = {Color3.fromRGB(128, 0, 128), 0.7}
-local ChamsVisibleColor = {Color3.fromRGB(255, 0, 255), 0.3}
-
-local AdornmentsCache = {}
-local IgnoreNames = {["HumanoidRootPart"] = true}
-
-local function CreateAdornment(part, isHead, vis)
-    local adorn
-    if isHead then
-        adorn = Instance.new("CylinderHandleAdornment")
-        adorn.Height = vis == 1 and 0.87 or 1.02
-        adorn.Radius = vis == 1 and 0.5 or 0.65
-    else
-        adorn = Instance.new("BoxHandleAdornment")
-        local offset = vis == 1 and -0.05 or 0.05
-        adorn.Size = part.Size + Vector3.new(offset, offset, offset)
-    end
-    adorn.Adornee = part
-    adorn.Parent = part
-    adorn.ZIndex = vis == 1 and 2 or 1
-    adorn.AlwaysOnTop = vis == 1
-    adorn.Visible = false
-    return adorn
-end
-
-local function IsEnemy(player)
-    if ESP and ESP.Settings and ESP.Settings.TeamCheck then
-        return player.Team ~= LocalPlayer.Team
-    end
-    return true
-end
-
-local function ApplyChams(player)
-    if player ~= LocalPlayer and player.Character then
-        for _, part in pairs(player.Character:GetChildren()) do
-            if part:IsA("BasePart") and not IgnoreNames[part.Name] then
-                if not AdornmentsCache[part] then
-                    AdornmentsCache[part] = {
-                        CreateAdornment(part, part.Name=="Head", 1),
-                        CreateAdornment(part, part.Name=="Head", 2)
-                    }
+    
+        --[[if shared.VoidDev then
+            print("Raw Response: "..tostring(a))
+            print("Decompressed data showing below:")
+            if type(a) == "table" then
+                for i,v in pairs(a) do
+                    print("Showing data for: "..tostring(i))
+                    if type(a[i]) == "table" then
+                        print("Table reponse for "..tostring(i).." detected! Showing the table:")
+                        for i2, v2 in pairs(a[i]) do
+                            print("Showing data for: "..tostring(i2))
+                            print("Data: "..tostring(a[i][i2]))
+                        end
+                    else
+                        print("Data: "..tostring(a[i]))
+                    end
+                    print("Continuing with next child of the table:")
+                    print("[-----------------------------]")
                 end
-                local ad = AdornmentsCache[part]
-                local visible = ScriptState.ChamsEnabled and IsEnemy(player)
-
-                ad[1].Visible = visible
-                ad[1].Color3 = ChamsOccludedColor[1]
-                ad[1].Transparency = ChamsOccludedColor[2]
-
-                ad[2].Visible = visible
-                ad[2].AlwaysOnTop = true
-                ad[2].ZIndex = 9e9
-                ad[2].Color3 = ChamsVisibleColor[1]
-                ad[2].Transparency = ChamsVisibleColor[2]
+            else
+                print("The response type is invalid! (Expected: table)")
             end
-        end
-    end
-end
-
-local function UpdateAllChams()
-    for _, player in pairs(Players:GetPlayers()) do
-        ApplyChams(player)
-    end
-end
-
-local function TrackPlayer(player)
-    player:GetPropertyChangedSignal("Team"):Connect(function()
-        if AdornmentsCache[player] then
-            for _, ad in pairs(AdornmentsCache[player]) do
-                ad.Visible = ScriptState.ChamsEnabled and IsEnemy(player)
-            end
-        end
+        end--]]
     end)
 end
-
-Players.PlayerAdded:Connect(TrackPlayer)
-for _, plr in pairs(Players:GetPlayers()) do
-    if plr ~= LocalPlayer then
-        TrackPlayer(plr)
-    end
-end
-
-RunService.RenderStepped:Connect(UpdateAllChams)
-
-VisualsEx:AddToggle("chamsEnabled", {
-    Text = "Chams",
-    Default = ScriptState.ChamsEnabled,
-    Callback = function(val)
-        ScriptState.ChamsEnabled = val
-        for part, ad in pairs(AdornmentsCache) do
-            ad[1].Visible = val
-            ad[2].Visible = val
-        end
-    end
-})
-
-VisualsEx:AddLabel("Chams Occluded Color"):AddColorPicker("chamsOccludedColor", {
-    Default = ChamsOccludedColor[1],
-    Callback = function(val)
-        ChamsOccludedColor[1] = val
-    end
-})
-
-VisualsEx:AddLabel("Chams Visible Color"):AddColorPicker("chamsVisibleColor", {
-    Default = ChamsVisibleColor[1],
-    Callback = function(val)
-        ChamsVisibleColor[1] = val
-    end
-})
-
-VisualsEx:AddSlider("chamsOccludedTransparency", {
-    Text = "Occluded Transparency",
-    Default = ChamsOccludedColor[2],
-    Min = 0,
-    Max = 1,
-    Rounding = 2,
-    Callback = function(val)
-        ChamsOccludedColor[2] = val
-    end
-})
-
-VisualsEx:AddSlider("chamsVisibleTransparency", {
-    Text = "Visible Transparency",
-    Default = ChamsVisibleColor[2],
-    Min = 0,
-    Max = 1,
-    Rounding = 2,
-    Callback = function(val)
-        ChamsVisibleColor[2] = val
-    end
-})
-
-local humanoid = nil
-
-frabox:AddToggle("speedEnabled", {
-    Text = "Speed Toggle",
-    Default = false,
-    Tooltip = "It makes you go fast.",
-    Callback = function(value)
-        ScriptState.isSpeedActive = value
-    end
-}):AddKeyPicker("speedToggleKey", {
-    Default = "None",
-    SyncToggleState = true,
-    Mode = "Toggle",
-    Text = "Speed Toggle Key",
-    Tooltip = "CFrame keybind.",
-    Callback = function(value)
-        ScriptState.isSpeedActive = value
-    end
-})
-
-frabox:AddSlider("cframespeed", {
-    Text = "CFrame Multiplier",
-    Default = 1,
-    Min = 1,
-    Max = 20,
-    Rounding = 1,
-    Tooltip = "The CFrame speed.",
-    Callback = function(value)
-        ScriptState.Cmultiplier = value
-    end,
-})
-
-frabox:AddToggle("flyEnabled", {
-    Text = "CFly Toggle",
-    Default = false,
-    Tooltip = "Toggle CFrame Fly functionality.",
-    Callback = function(value)
-        ScriptState.isFlyActive = value
-    end
-}):AddKeyPicker("flyToggleKey", {
-    Default = "None",
-    SyncToggleState = true,
-    Mode = "Toggle",
-    Text = "CFly Toggle Key",
-    Tooltip = "CFrame Fly keybind.",
-    Callback = function(value)
-        ScriptState.isFlyActive = value
-    end
-})
-
-frabox:AddSlider("flySpeed", {
-    Text = "CFly Speed",
-    Default = 1,
-    Min = 1,
-    Max = 50,
-    Rounding = 1,
-    Tooltip = "The CFrame Fly speed.",
-    Callback = function(value)
-        ScriptState.flySpeed = value
-    end,
-})
-
-frabox:AddToggle("noClipEnabled", {
-    Text = "NoClip Toggle",
-    Default = false,
-    Tooltip = "Enable or disable NoClip.",
-    Callback = function(value)
-        ScriptState.isNoClipActive = value
-    end
-}):AddKeyPicker("noClipToggleKey", {
-    Default = "None",
-    SyncToggleState = true,
-    Mode = "Toggle",
-    Text = "NoClip Toggle Key",
-    Tooltip = "Keybind to toggle NoClip.",
-    Callback = function(value)
-        ScriptState.isNoClipActive = value
-    end
-})
-
-getgenv().WeaponOnHands = getgenv().WeaponOnHands or false
-getgenv().WeaponModifyMethod = getgenv().WeaponModifyMethod or "Attribute"
-
-local function findSettingsModuleForWeapon(weapon, property)
-    if not (weapon and weapon:IsA("Tool")) then
-        return nil
-    end
-
-    local function moduleSupportsProperty(moduleScript)
-        local success, module = pcall(require, moduleScript)
-        if success and type(module) == "table" and module[property] ~= nil then
-            return true
-        end
-        return false
-    end
-
-    for _, moduleScript in ipairs(weapon:GetDescendants()) do
-        if moduleScript:IsA("ModuleScript") and moduleSupportsProperty(moduleScript) then
-            return moduleScript
-        end
-    end
-
-    local weaponName = weapon.Name
-    local searchFolders = {}
-
-    local configurations = ReplicatedStorage:FindFirstChild("Configurations")
-    if configurations then
-        table.insert(searchFolders, configurations)
-    end
-
-    local acsFolder = ReplicatedStorage:FindFirstChild("ACS_Guns", true)
-    if acsFolder then
-        table.insert(searchFolders, acsFolder)
-    end
-
-    table.insert(searchFolders, ReplicatedStorage)
-
-    for _, container in ipairs(searchFolders) do
-        if typeof(container) == "Instance" then
-            local candidate = container:FindFirstChild(weaponName, true)
-            if candidate then
-                if candidate:IsA("ModuleScript") and moduleSupportsProperty(candidate) then
-                    return candidate
-                end
-
-                for _, moduleScript in ipairs(candidate:GetDescendants()) do
-                    if moduleScript:IsA("ModuleScript") and moduleSupportsProperty(moduleScript) then
-                        return moduleScript
-                    end
+local version = 1
+function VWFunctions.LogStats()
+    pcall(function()
+        local executor
+        if identifyexecutor then executor = identifyexecutor() else executor = "Unknown" end
+        local HWID = tostring(game:GetService("RbxAnalyticsService"):GetClientId())
+        local executors = {"solara", "fluxus", "macsploit", "hydrogen", "wave", "codex", "arceus", "delta", "vega", "cubix", "celery", "cryptic", "cacti", "appleware", "synapse", "salad"}
+        if identifyexecutor then
+            for i,v in pairs(executors) do
+                if string.find(string.lower(identifyexecutor()), executors[i]) then
+                    executor = executors[i]
+                    break
                 end
             end
         end
-    end
-
-    return nil
+        local headers = {
+            ["Content-type"] = "application/json",
+            ["Authorization"] = "Bearer imsureitwontgetddosed"
+        }
+        local data = {
+            ["client_id"] = tostring(HWID), 
+            ["executor"] = tostring(executor)
+        }
+        local final_data = game:GetService("HttpService"):JSONEncode(data)
+        local url = "https://voidware-stats.vapevoidware.xyz/stats/data/add"
+        local a = request({
+            Url = url,
+            Method = 'POST',
+            Headers = headers,
+            Body = final_data
+        })
+        local statusCodes = {
+            ["403"] = "Voidware Error]: Error doing step2 Error code: 1986",
+            ["401"] = "Voidware Error]: Error doing step2 Error code: 1922",
+            ["429"] = "Voidware Error]: Error doing step2 Error code: 1954 Please rejoin!"
+        }
+        if a["StatusCode"] ~= 200 then if statusCodes[tostring(a["StatusCode"])] then warn(tostring(statusCodes[tostring(a["StatusCode"])])) else warn("Voidware Error]: Error doing step2 Error code: 1900") end end
+    end)
 end
-
-local function modifyWeaponSettings(property, value)
-    local player = Players.LocalPlayer
-    local backpack = player:WaitForChild("Backpack")
-    local character = player.Character or player.CharacterAdded:Wait()
-
-    local function applyAttribute(weapon)
-        if weapon and weapon:IsA("Tool") then
+function VWFunctions.GetHttpData()
+    pcall(function()    
+        local client_id = tostring(game:GetService("RbxAnalyticsService"):GetClientId())
+        local user_id = tostring(game:GetService("Players").LocalPlayer.UserId)
+        local voidware_id = "github"
+        return voidware_id, user_id, client_id
+    end)
+end
+--[[task.spawn(function()
+    VWFunctions.CreateID()
+    VWFunctions.LogStats()
+end)--]]
+shared.VWFunctions = VWFunctions
+getgenv().VWFunctions = VWFunctions
+local blacklistedexecutors = {"solara", "celery", "appleware"}
+if identifyexecutor then
+    local executor = identifyexecutor()
+    for i,v in pairs(blacklistedexecutors) do
+        if string.find(string.lower(executor), blacklistedexecutors[i]) then 
+            shared.BlacklistedExecutor = {Value = true, Executor = tostring(executor)}
+        end
+    end
+end
+local function install_profiles(num)
+    if not num then return warn("No number specified!") end
+    local httpservice = game:GetService('HttpService')
+    local guiprofiles = {}
+    local profilesfetched
+    local repoOwner = shared.RiseMode and "VapeVoidware/RiseProfiles" or "Erchobg/VoidwareProfiles"
+    local function vapeGithubRequest(scripturl)
+        if not isfile(baseDirectory..scripturl) then
+            local suc, res = pcall(function() return game:HttpGet('https://raw.githubusercontent.com/'..repoOwner..'/main/'..scripturl, true) end)
+            if not isfolder(baseDirectory.."Profiles") then
+                makefolder(baseDirectory..'Profiles')
+            end
+            if not isfolder(baseDirectory..'ClosetProfiles') then makefolder(baseDirectory..'ClosetProfiles') end
+            writefile(baseDirectory..scripturl, res)
+            task.wait()
+        end
+        return print(scripturl)
+    end
+    local Gui1 = {
+        MainGui = ""
+    }
+    local gui = Instance.new("ScreenGui")
+        gui.Name = "idk"
+        gui.DisplayOrder = 999
+        gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+        gui.OnTopOfCoreBlur = true
+        gui.ResetOnSpawn = false
+        gui.Parent = game:GetService("Players").LocalPlayer.PlayerGui
+        Gui1["MainGui"] = gui
+    
+    local function downloadVapeProfile(path)
+        print(path)
+        task.spawn(function()
+            local textlabel = Instance.new('TextLabel')
+            textlabel.Size = UDim2.new(1, 0, 0, 36)
+            textlabel.Text = 'Downloading '..path
+            textlabel.BackgroundTransparency = 1
+            textlabel.TextStrokeTransparency = 0
+            textlabel.TextSize = 30
+            textlabel.Font = Enum.Font.SourceSans
+            textlabel.TextColor3 = Color3.new(1, 1, 1)
+            textlabel.Position = UDim2.new(0, 0, 0, -36)
+            textlabel.Parent = Gui1.MainGui
+            task.wait(0.1)
+            textlabel:Destroy()
+            vapeGithubRequest(path)
+        end)
+        return
+    end
+    task.spawn(function()
+        local res1
+        if num == 1 then
+            res1 = "https://api.github.com/repos/"..repoOwner.."/contents/Profiles"
+        elseif num == 2 then
+            res1 = "https://api.github.com/repos/Erchobg/VoidwareProfiles/contents/ClosetProfiles"
+        end
+        res = game:HttpGet(res1, true)
+        if res ~= '404: Not Found' then 
+            for i,v in next, game:GetService("HttpService"):JSONDecode(res) do 
+                if type(v) == 'table' and v.name then 
+                    table.insert(guiprofiles, v.name) 
+                end
+            end
+        end
+        profilesfetched = true
+    end)
+    repeat task.wait() until profilesfetched
+    for i, v in pairs(guiprofiles) do
+        local name
+        if num == 1 then name = "Profiles/" elseif num == 2 then name = "ClosetProfiles/" end
+        downloadVapeProfile(name..guiprofiles[i])
+        task.wait()
+    end
+    if (not isfolder(baseDirectory..'Libraries')) then makefolder(baseDirectory..'Libraries') end
+    if num == 1 then writefile(baseDirectory..'Libraries/profilesinstalled3.txt', "true") elseif num == 2 then writefile(baseDirectory..'ClosetProfiles/profilesinstalled3.txt', "true") end 
+end
+local function are_installed_1()
+    if not isfolder(baseDirectory..'Profiles') then makefolder(baseDirectory..'Profiles') end
+    if isfile(baseDirectory..'Libraries/profilesinstalled3.txt') then return true else return false end
+end
+local function are_installed_2() 
+    if not isfolder(baseDirectory..'ClosetProfiles') then makefolder(baseDirectory..'ClosetProfiles') end
+    if isfile(baseDirectory..'ClosetProfiles/profilesinstalled3.txt') then return true else return false end
+end
+if not are_installed_1() then install_profiles(1) end
+if not are_installed_2() then install_profiles(2) end
+local url = shared.RiseMode and "https://github.com/VapeVoidware/VWRise/" or "https://github.com/VapeVoidware/VoidwareBakup"
+pcall(function()
+    if not shared.VapeDeveloper then 
+        local commit = "main"
+        for i,v in pairs(game:HttpGet(url):split("\n")) do 
+            if v:find("commit") and v:find("fragment") then 
+                local str = v:split("/")[5]
+                commit = str:sub(0, str:find('"') - 1)
+                break
+            end
+        end
+        if commit then
+            if isfolder(baseDirectory) then 
+                writefile(baseDirectory.."commithash2.txt", commit)
+                if ((not isfile(baseDirectory.."commithash.txt")) or (readfile(baseDirectory.."commithash.txt") ~= commit or commit == "main")) then
+                    for i,v in pairs({baseDirectory.."Universal.lua", baseDirectory.."MainScript.lua", baseDirectory.."GuiLibrary.lua"}) do 
+                        if isfile(v) and readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
+                            if not shared.VoidDev then
+                                delfile(v)
+                            end
+                        end 
+                    end
+                    if isfolder(baseDirectory.."CustomModules") then 
+                        for i,v in pairs(listfiles(baseDirectory.."CustomModules")) do 
+                            if isfile(v) and readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
+                                if not shared.VoidDev then
+                                    delfile(v)
+                                end
+                            end 
+                        end
+                    end
+                    if isfolder(baseDirectory.."Libraries") then 
+                        for i,v in pairs(listfiles(baseDirectory.."Libraries")) do 
+                            if isfile(v) and readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
+                                if not shared.VoidDev then
+                                    delfile(v)
+                                end
+                            end 
+                        end
+                    end
+                    writefile(baseDirectory.."commithash2.txt", commit)
+                end
+            else
+                makefolder("vape")
+                writefile(baseDirectory.."commithash2.txt", commit)
+            end
+        else
+            error("Failed to connect to github, please try using a VPN.")
+        end
+    end
+    if not shared.VapeDeveloper then 
+        local commit = "main"
+        for i,v in pairs(game:HttpGet("https://github.com/VapeVoidware/vapevoidware"):split("\n")) do 
+            if v:find("commit") and v:find("fragment") then 
+                local str = v:split("/")[5]
+                commit = str:sub(0, str:find('"') - 1)
+                break
+            end
+        end
+        if commit then
+            if isfolder("vape") then 
+                if ((not isfile(baseDirectory.."commithash.txt")) or (readfile(baseDirectory.."commithash.txt") ~= commit or commit == "main")) then
+                    writefile(baseDirectory.."commithash.txt", commit)
+                end
+            else
+                makefolder("vape")
+                writefile(baseDirectory.."commithash.txt", commit)
+            end
+        else
+            error("Failed to connect to github, please try using a VPN.")
+        end
+    end
+end)
+local url = shared.RiseMode and "https://github.com/VapeVoidware/VWRise/" or "https://github.com/VapeVoidware/VoidwareBakup"
+local commit = "main"
+writefile(baseDirectory.."commithash2.txt", commit)
+shared.RiseMode = false
+commit = "7a624fca7a730a6f2eb6292999e0acbadc673fc1"
+--[[if not shared.RiseMode then
+    commit = "60143661ed276fb2600b1a5f09015ecce12ead82"
+else
+    commit = '9637b74a290e556b1305b4cb0e85012af04b3183'
+end--]]
+commit = shared.CustomCommit and tostring(shared.CustomCommit) or commit
+writefile(baseDirectory.."commithash2.txt", commit)
+local function vapeGithubRequest(scripturl, isImportant)
+    if isfile(baseDirectory..scripturl) then
+        if not shared.VoidDev then
+            pcall(function() delfile(baseDirectory..scripturl) end)
+        else
+            return readfile(baseDirectory..scripturl) 
+        end
+    end
+    local suc, res
+    local url = (scripturl == "MainScript.lua" or scripturl == "GuiLibrary.lua") and shared.RiseMode and "https://raw.githubusercontent.com/VapeVoidware/VWRise/" or "https://raw.githubusercontent.com/VapeVoidware/VoidwareBakup/"
+    suc, res = pcall(function() return game:HttpGet(url..commit.."/"..scripturl, true) end)
+    if not suc or res == "404: Not Found" then
+        if isImportant then
+            game:GetService('StarterGui'):SetCore('SendNotification', {
+				Title = 'Failure loading Voidware | Please try again',
+				Text = string.format("CH: %s Failed to connect to github: %s%s : %s", tostring(commit), tostring(baseDirectory), tostring(scripturl), tostring(res)),
+				Duration = 15,
+			})
             pcall(function()
-                weapon:SetAttribute(property, value)
+                shared.GuiLibrary:SelfDestruct()
+                shared.vape:Uninject()
+                shared.rise:SelfDestruct()
+                shared.vape = nil
+                shared.vape = nil
+                shared.rise = nil
+                shared.VapeExecuted = nil
+                shared.RiseExecuted = nil
+            end)
+            --game:GetService("Players").LocalPlayer:Kick(string.format("CH: %s Failed to connect to github: %s%s : %s", tostring(commit), tostring(baseDirectory), tostring(scripturl), tostring(res)))
+        end
+        warn(baseDirectory..scripturl, res)
+    end
+    if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
+    return res
+end
+pcall(function()
+    if not isfile("vape/assetversion.txt") then
+        writefile("vape/assetversion.txt", "")
+    end
+end)
+local function pload(fileName, isImportant, required)
+    fileName = tostring(fileName)
+    if string.find(fileName, "CustomModules") and string.find(fileName, "Voidware") then
+        fileName = string.gsub(fileName, "Voidware", "VW")
+    end        
+    if shared.VoidDev and shared.DebugMode then warn(fileName, isImportant, required, debug.traceback(fileName)) end
+    local res = vapeGithubRequest(fileName, isImportant)
+    local a = loadstring(res)
+    local suc, err = true, ""
+    if type(a) ~= "function" then suc = false; err = tostring(a) else if required then return a() else a() end end
+    if (not suc) then 
+        if isImportant then
+            if (not string.find(string.lower(err), "vape already injected")) and (not string.find(string.lower(err), "rise already injected")) then
+                task.spawn(function()
+                    repeat task.wait() until errorNotification
+                    errorNotification("Failure loading critical file! : "..baseDirectory..tostring(fileName), " : "..tostring(debug.traceback(err)), 10) 
+                end)
+            end
+            --warn("Failure loading critical file! : vape/"..tostring(fileName).." : "..tostring(debug.traceback(err)))
+            --if (not string.find(string.lower(err), "vape already injected")) then game:GetService("Players").LocalPlayer:Kick("Failure loading critical file! : vape/"..tostring(fileName).." : "..tostring(debug.traceback(err))) end
+        else
+            task.spawn(function()
+                repeat task.wait() until errorNotification
+                if not string.find(res, "404: Not Found") then 
+                    errorNotification('Failure loading: '..baseDirectory..tostring(fileName), tostring(debug.traceback(err)), 7)
+                end
             end)
         end
     end
-
-    local function applyRequireModule(weapon)
-        local settingsModule = findSettingsModuleForWeapon(weapon, property)
-        if settingsModule then
-            local success, module = pcall(require, settingsModule)
-            if success and type(module) == "table" and module[property] ~= nil then
-                module[property] = value
-            end
-        end
-    end
-
-    local function processWeapon(weapon)
-        if not (weapon and weapon:IsA("Tool")) then
-            return
-        end
-
-        if (getgenv().WeaponModifyMethod or "Attribute") == "Attribute" then
-            applyAttribute(weapon)
-        else
-            applyRequireModule(weapon)
-        end
-    end
-
-    local handledEquippedWeapon = false
-
-    if getgenv().WeaponOnHands then
-        local toolInHand = character:FindFirstChildOfClass("Tool")
-        if toolInHand then
-            processWeapon(toolInHand)
-            handledEquippedWeapon = true
-        end
-    end
-
-    if not handledEquippedWeapon then
-        for _, item in ipairs(backpack:GetChildren()) do
-            processWeapon(item)
-        end
-
-        local equippedTool = character:FindFirstChildOfClass("Tool")
-        if equippedTool and equippedTool.Parent ~= backpack then
-            processWeapon(equippedTool)
-        end
-    end
 end
-
-ACSEngineBox:AddToggle("WeaponOnHands", {
-    Text = "Weapon In Hands",
-    Default = false,
-    Tooltip = "Apply changes only to the weapon in hands if enabled.",
-    Callback = function(value)
-        getgenv().WeaponOnHands = value
-    end
-})
-
-ACSEngineBox:AddDropdown("WeaponModifyMethod", {
-    Text = "Weapon Modify Method",
-    Default = "Attribute",
-    Values = {"Attribute", "Require"},
-    Tooltip = "Choose how to modify weapon settings",
-    Callback = function(value)
-        getgenv().WeaponModifyMethod = value
-    end
-})
-
-ACSEngineBox:AddButton('INF AMMO', function()
-    modifyWeaponSettings("Ammo", math.huge)
-end)
-
-ACSEngineBox:AddButton('NO RECOIL | NO SPREAD', function()
-    if getgenv().WeaponModifyMethod == "Attribute" then
-        modifyWeaponSettings("VRecoil", Vector2.new(0, 0))
-        modifyWeaponSettings("HRecoil", Vector2.new(0, 0))
-    else
-        modifyWeaponSettings("VRecoil", {0, 0})
-        modifyWeaponSettings("HRecoil", {0, 0})
-    end
-    modifyWeaponSettings("MinSpread", 0)
-    modifyWeaponSettings("MaxSpread", 0)
-    modifyWeaponSettings("RecoilPunch", 0)
-    modifyWeaponSettings("AimRecoilReduction", 0)
-end)
-
-ACSEngineBox:AddButton('INF BULLET DISTANCE', function()
-    modifyWeaponSettings("Distance", 25000)
-end)
-
-ACSEngineBox:AddInput("BulletSpeedInput", {
-    Text = "Bullet Speed",
-    Default = "10000",
-    Tooltip = "Set the bullet speed",
-    Callback = function(value)
-        getgenv().bulletSpeedValue = tonumber(value) or 10000
-    end
-})
-
-ACSEngineBox:AddButton('CHANGE BULLET SPEED', function()
-    modifyWeaponSettings("BSpeed", getgenv().bulletSpeedValue or 10000)
-    modifyWeaponSettings("MuzzleVelocity", getgenv().bulletSpeedValue or 10000)
-end)
-
-local fireRateInput = ACSEngineBox:AddInput('FireRateInput', {
-    Text = 'Enter Fire Rate',
-    Default = '8888',
-    Tooltip = 'Type the fire rate value you want to apply.',
-})
-
-ACSEngineBox:AddButton('CHANGE FIRE RATE', function()
-    local rate = tonumber(fireRateInput.Value) or 8888
-    modifyWeaponSettings("FireRate", rate)
-    modifyWeaponSettings("ShootRate", rate)
-end)
-
-local bulletsInput = ACSEngineBox:AddInput('BulletsInput', {
-    Text = 'Enter Bullets',
-    Default = '50',
-    Tooltip = 'Type the number of bullets you want to apply.',
-    Numeric = true
-})
-
-ACSEngineBox:AddButton('MULTI BULLETS', function()
-    local bulletsValue = tonumber(bulletsInput.Value) or 50
-    modifyWeaponSettings("Bullets", bulletsValue)
-end)
-
-local inputField = ACSEngineBox:AddInput('FireModeInput', {
-    Text = 'Enter Fire Mode',
-    Default = 'Auto',
-    Tooltip = 'Type the fire mode you want to apply.',
-})
-
-ACSEngineBox:AddButton('CHANGE FIRE MODE', function()
-    modifyWeaponSettings("Mode", inputField.Value or 'Auto')
-end)
-
-local targetStrafe = GeneralTab:AddLeftGroupbox("Target Strafe")
-ScriptState.strafeSpeed, ScriptState.strafeRadius = 50, 5
-ScriptState.strafeMode, ScriptState.strafeTargetPart = "Horizontal", nil
-local function startTargetStrafe()
-    local targetPart = getClosestPlayer()
-    ScriptState.strafeTargetPart = targetPart
-    if ScriptState.strafeTargetPart and ScriptState.strafeTargetPart.Parent then
-        ScriptState.originalCameraMode = Players.LocalPlayer.CameraMode
-        Players.LocalPlayer.CameraMode = Enum.CameraMode.Classic
-        local targetPos = ScriptState.strafeTargetPart.Position
-        LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(targetPos))
-        Camera.CameraSubject = ScriptState.strafeTargetPart.Parent:FindFirstChild("Humanoid")
-    end
-end
-
-local function strafeAroundTarget()
-    if not (ScriptState.strafeTargetPart and ScriptState.strafeTargetPart.Parent) then return end
-    local targetPos = ScriptState.strafeTargetPart.Position
-    local angle = tick() * (ScriptState.strafeSpeed / 10)
-    local offset = ScriptState.strafeMode == "Horizontal"
-        and Vector3.new(math.cos(angle) * ScriptState.strafeRadius, 0, math.sin(angle) * ScriptState.strafeRadius)
-        or Vector3.new(math.cos(angle) * ScriptState.strafeRadius, ScriptState.strafeRadius, math.sin(angle) * ScriptState.strafeRadius)
-    LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(targetPos + offset))
-    LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(LocalPlayer.Character.HumanoidRootPart.Position, targetPos)
-end
-
-local function stopTargetStrafe()
-    Players.LocalPlayer.CameraMode = ScriptState.originalCameraMode or Enum.CameraMode.Classic
-    Camera.CameraSubject = LocalPlayer.Character.Humanoid
-    ScriptState.strafeEnabled, ScriptState.strafeTargetPart = false, nil
-end
-targetStrafe:AddToggle("strafeToggle", {
-    Text = "Target Strafe",
-    Default = false,
-    Tooltip = "Enable or disable Target Strafe.",
-    Callback = function(value)
-        ScriptState.strafeEnabled = value
-        if ScriptState.strafeEnabled then
-            startTargetStrafe()
-        else
-            stopTargetStrafe()
-        end
-    end
-}):AddKeyPicker("strafeToggleKey", {
-    Default = "None",
-    SyncToggleState = true,
-    Mode = "Toggle",
-    Text = "Target Strafe",
-    Tooltip = "Key to toggle Target Strafe",
-    Callback = function(value)
-        ScriptState.strafeEnabled = value
-        if ScriptState.strafeEnabled then
-            startTargetStrafe()
-        else
-            stopTargetStrafe()
-        end
-    end
-})
-
-targetStrafe:AddDropdown("strafeModeDropdown", {
-    AllowNull = false,
-    Text = "Target Strafe Mode",
-    Default = "Horizontal",
-    Values = {"Horizontal", "UP"},
-    Tooltip = "Select the strafing mode.",
-    Callback = function(value) ScriptState.strafeMode = value end
-})
-
-targetStrafe:AddSlider("strafeRadiusSlider", {
-    Text = "Strafe Radius",
-    Default = 5,
-    Min = 1,
-    Max = 20,
-    Rounding = 1,
-    Tooltip = "Set the radius of movement around the target.",
-    Callback = function(value) ScriptState.strafeRadius = value end
-})
-
-targetStrafe:AddSlider("strafeSpeedSlider", {
-    Text = "Strafe Speed",
-    Default = 50,
-    Min = 10,
-    Max = 200,
-    Rounding = 1,
-    Tooltip = "Set the speed of strafing around the target.",
-    Callback = function(value) ScriptState.strafeSpeed = value end
-})
-
-local keybindWatchers = {}
-
-local function registerKeybindWatcher(toggleId, keyPickerId, handlers)
-    local toggle = Toggles[toggleId]
-    local keyPicker = Options[keyPickerId]
-
-    if not (toggle and keyPicker) then
-        return
-    end
-
-    local watcher = {
-        toggle = toggle,
-        keyPicker = keyPicker,
-        lastState = keyPicker:GetState(),
-        lastMode = keyPicker.Mode,
-        modeChanged = handlers and handlers.onModeChanged,
-        stateChanged = handlers and handlers.onStateChanged,
-    }
-
-    if toggle.Value ~= watcher.lastState then
-        toggle:SetValue(watcher.lastState)
-    elseif watcher.stateChanged then
-        watcher.stateChanged(watcher.lastState)
-    end
-
-    if watcher.modeChanged then
-        watcher.modeChanged(watcher.lastMode)
-    end
-
-    keyPicker:OnChanged(function()
-        watcher.lastMode = keyPicker.Mode
-        watcher.lastState = keyPicker:GetState()
-        if watcher.modeChanged then
-            watcher.modeChanged(watcher.lastMode)
-        end
-        if toggle.Value ~= watcher.lastState then
-            toggle:SetValue(watcher.lastState)
-        elseif watcher.stateChanged then
-            watcher.stateChanged(watcher.lastState)
-        end
-    end)
-
-    table.insert(keybindWatchers, watcher)
-end
-
-registerKeybindWatcher("silentAimEnabled", "silentAim_KeyPicker", {
-    onModeChanged = function(mode)
-        SilentAimSettings.KeyMode = mode or "Toggle"
-    end,
-    onStateChanged = function(state)
-        SilentAimSettings.Enabled = state
-        if silentAimToggle.Value ~= state then
-            silentAimToggle:SetValue(state)
-        end
-    end,
-})
-
-registerKeybindWatcher("speedEnabled", "speedToggleKey")
-registerKeybindWatcher("flyEnabled", "flyToggleKey")
-registerKeybindWatcher("noClipEnabled", "noClipToggleKey")
-registerKeybindWatcher("strafeToggle", "strafeToggleKey")
-
-RunService.RenderStepped:Connect(function()
-    for _, watcher in ipairs(keybindWatchers) do
-        local state = watcher.keyPicker:GetState()
-
-        if watcher.keyPicker.Mode ~= watcher.lastMode then
-            watcher.lastMode = watcher.keyPicker.Mode
-            if watcher.modeChanged then
-                watcher.modeChanged(watcher.lastMode)
-            end
-            state = watcher.keyPicker:GetState()
-        end
-
-        if state ~= watcher.lastState then
-            watcher.lastState = state
-            if watcher.toggle.Value ~= state then
-                watcher.toggle:SetValue(state)
-            elseif watcher.stateChanged then
-                watcher.stateChanged(state)
-            end
-        end
-    end
-end)
-
-RunService.RenderStepped:Connect(function()
-    if ScriptState.strafeEnabled then
-        strafeAroundTarget()
-    end
-end)
-
-while true do
-    task.wait()
-
-    if ScriptState.isSpeedActive or ScriptState.isFlyActive or ScriptState.isNoClipActive then
-        local character = LocalPlayer.Character
-        local rootPart = character and character:FindFirstChild("HumanoidRootPart")
-
-        if character and rootPart then
-            humanoid = character:FindFirstChild("Humanoid")
-
-            if ScriptState.isSpeedActive and humanoid and humanoid.MoveDirection.Magnitude > 0 then
-                local moveDirection = humanoid.MoveDirection.Unit
-                rootPart.CFrame = rootPart.CFrame + moveDirection * ScriptState.Cmultiplier
-            end
-
-            if ScriptState.isFlyActive then
-                local flyDirection = Vector3.zero
-
-                if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-                    flyDirection = flyDirection + Camera.CFrame.LookVector
-                end
-                if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-                    flyDirection = flyDirection - Camera.CFrame.LookVector
-                end
-                if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-                    flyDirection = flyDirection - Camera.CFrame.RightVector
-                end
-                if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-                    flyDirection = flyDirection + Camera.CFrame.RightVector
-                end
-
-                if flyDirection.Magnitude > 0 then
-                    flyDirection = flyDirection.Unit
-                end
-
-                local newPosition = rootPart.Position + flyDirection * ScriptState.flySpeed
-                rootPart.CFrame = CFrame.new(newPosition)
-                rootPart.Velocity = Vector3.new(0, 0, 0)
-            end
-
-            if ScriptState.isNoClipActive then
-                for _, v in pairs(character:GetDescendants()) do
-                    if v:IsA("BasePart") and v.CanCollide then
-                        v.CanCollide = false
-                    end
-                end
-            end
-        end
-    end
-end
-
-ThemeManager:LoadDefaultTheme()
+shared.pload = pload
+getgenv().pload = pload
+return pload("MainScript.lua", true)
